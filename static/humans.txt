@@ -1,0 +1,9 @@
+/* TEAM */
+Developer: A&X Labs
+Site: https://axlabs.ai
+
+/* SITE */
+Last update: 2026/03/19
+Standards: HTML5, CSS3, ES6+
+Components: SvelteKit, Tailwind CSS
+Software: VS Code, Git
