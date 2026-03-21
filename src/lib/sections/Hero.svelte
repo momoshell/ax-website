@@ -17,9 +17,9 @@
 	
 	<!-- Main content - compact centered layout -->
 	<div class="relative z-10 text-center max-w-3xl mx-auto px-6">
-		<!-- Slash Heading -->
+		<!-- Slash Heading - using header-title class -->
 		<div class="mb-6">
-			<SlashHeading text="A&X LABS" class="text-6xl md:text-8xl" />
+			<SlashHeading text="A&X LABS" class="header-title text-6xl md:text-8xl" />
 		</div>
 		
 		<!-- Barcode -->
@@ -27,17 +27,17 @@
 			<Barcode value="A&X LABS" width={300} height={80} />
 		</div>
 		
-		<!-- Simplified Tagline -->
-		<p class="tech-label text-lg md:text-xl text-white/60 mb-10 tracking-widest uppercase">
+		<!-- Subtitle - using sub-text class -->
+		<p class="sub-text mb-10">
 			Engineering Intelligence
 		</p>
 		
-		<!-- CTA Button - Industrial style: sharp, inverted hover -->
+		<!-- CTA Button - using cta-button class -->
 		<button
 			onclick={() => scrollToSection('services')}
-			class="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/20 text-white font-mono font-semibold tracking-wider hover:bg-white hover:text-black transition-all duration-200 group"
+			class="cta-button inline-flex items-center gap-3 group"
 		>
-			<span class="text-sm tracking-widest uppercase">Explore Our Work</span>
+			<span>Explore Our Work</span>
 			<svg 
 				class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" 
 				fill="none" 

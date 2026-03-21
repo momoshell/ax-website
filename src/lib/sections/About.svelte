@@ -22,45 +22,43 @@
 	});
 </script>
 
-<Section id="about">
-	<div class="max-w-6xl mx-auto">
+<Section id="about" class="py-24">
+	<div class="max-w-6xl mx-auto px-6">
 		{#if isLoading}
 			<!-- Loading skeleton -->
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+			<div class="split-layout">
 				<div>
-					<div class="h-12 bg-surface rounded-sm w-32 mb-4 animate-pulse"></div>
-					<div class="h-8 bg-surface rounded-sm w-24 animate-pulse"></div>
+					<div class="section-label mb-4 w-24 h-3 bg-surface animate-pulse"></div>
+					<div class="section-heading w-40 h-12 bg-surface animate-pulse"></div>
 				</div>
-				<div class="space-y-4">
-					<div class="h-6 bg-surface rounded-sm w-full animate-pulse"></div>
-					<div class="h-6 bg-surface rounded-sm w-full animate-pulse"></div>
-					<div class="h-6 bg-surface rounded-sm w-3/4 animate-pulse"></div>
+				<div class="space-y-6">
+					<div class="h-5 bg-surface w-full animate-pulse"></div>
+					<div class="h-5 bg-surface w-full animate-pulse"></div>
+					<div class="h-5 bg-surface w-2/3 animate-pulse"></div>
 				</div>
 			</div>
 		{:else if error}
-			<p class="text-muted-foreground text-center">Unable to load about content</p>
+			<p class="body-text text-center">Unable to load about content</p>
 		{:else if content}
 			<ScrollReveal>
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-					<!-- Left column: Section header -->
+				<div class="split-layout">
+					<!-- Left column: Section header - sticky on desktop -->
 					<div class="lg:sticky lg:top-8">
-						<h2 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+						<p class="section-label mb-4">About</p>
+						<h2 class="section-heading mb-6">
 							{content.title}
 						</h2>
-						<p class="text-xl text-muted-foreground">
-							{content.subtitle}
-						</p>
-						
 						<!-- Decorative accent line -->
-						<div class="mt-8 w-16 h-1 bg-accent"></div>
+						<div class="w-12 h-px bg-white/20"></div>
 					</div>
 					
 					<!-- Right column: Content -->
-					<div class="prose prose-invert prose-lg max-w-none">
+					<div>
+						<p class="section-label mb-6">{content.subtitle}</p>
 						{#if content.body}
-							<div class="text-lg leading-relaxed space-y-4 text-muted-foreground">
+							<div class="space-y-6">
 								{#each content.body.split('\n\n').filter(Boolean) as paragraph, i (i)}
-									<p class="text-lg leading-relaxed">{paragraph}</p>
+									<p class="body-text text-lg leading-relaxed">{paragraph}</p>
 								{/each}
 							</div>
 						{/if}

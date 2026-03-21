@@ -34,66 +34,57 @@
 	}
 </script>
 
-<Section id="services" class="bg-surface/30">
-	<div class="max-w-6xl mx-auto">
+<Section id="services" class="bg-surface/30 py-24">
+	<div class="max-w-6xl mx-auto px-6">
 		{#if isLoading}
 			<!-- Loading skeleton -->
-			<div class="text-center mb-16">
-				<div class="h-12 bg-surface rounded-sm w-48 mx-auto mb-4 animate-pulse"></div>
-				<div class="h-6 bg-surface rounded-sm w-32 mx-auto animate-pulse"></div>
-			</div>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-		{#each Array(4) as _, i (i)}
-				<div class="bg-surface p-6 rounded-sm h-48 animate-pulse"></div>
-			{/each}
+			<div class="split-layout mb-16">
+				<div>
+					<div class="section-label mb-4 w-24 h-3 bg-surface animate-pulse"></div>
+					<div class="section-heading w-48 h-12 bg-surface animate-pulse"></div>
+				</div>
+				<div class="space-y-8">
+					{#each Array(4) as _, i (i)}
+						<div class="horizontal-divider pt-8 pb-8">
+							<div class="h-6 bg-surface w-32 mb-4 animate-pulse"></div>
+							<div class="h-4 bg-surface w-full mb-2 animate-pulse"></div>
+							<div class="h-4 bg-surface w-3/4 animate-pulse"></div>
+						</div>
+					{/each}
+				</div>
 			</div>
 		{:else if error}
-			<p class="text-muted-foreground text-center">Unable to load services</p>
+			<p class="body-text text-center">Unable to load services</p>
 		{:else if content}
-			<!-- Section header -->
-			<div class="text-center mb-16">
-				<h2 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-					{content.title}
-				</h2>
-				<p class="text-xl text-muted-foreground">
+			<!-- Split layout header -->
+			<div class="split-layout mb-16">
+				<div>
+					<p class="section-label mb-4">Services</p>
+					<h2 class="section-heading">
+						{content.title}
+					</h2>
+				</div>
+				<p class="body-text text-lg self-end">
 					{content.subtitle}
 				</p>
 			</div>
 			
-			<!-- Services grid -->
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<!-- Services list with horizontal dividers -->
+			<div class="space-y-0">
 				{#each content.services as service, index (service.title)}
 					<ScrollReveal delay={index * 100}>
-						<div 
-							class="group bg-surface p-6 rounded-sm border border-border/10 hover:border-accent/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 h-full"
-						>
-							<!-- Icon -->
-							<div class="w-12 h-12 bg-background rounded-sm flex items-center justify-center mb-5 group-hover:bg-accent/10 transition-colors duration-300">
-								<svg 
-									class="w-6 h-6 text-accent" 
-									fill="none" 
-									stroke="currentColor" 
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-								>
-									<path 
-										stroke-linecap="round" 
-										stroke-linejoin="round" 
-										stroke-width="1.5" 
-										d={getIconPath(service.icon)}
-									></path>
-								</svg>
+						<div class="service-card group">
+							<div class="split-layout">
+								<!-- Service title -->
+								<h3 class="service-title group-hover:text-accent transition-colors duration-300">
+									{service.title}
+								</h3>
+								
+								<!-- Service description -->
+								<p class="service-description">
+									{service.description}
+								</p>
 							</div>
-							
-							<!-- Title -->
-							<h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
-								{service.title}
-							</h3>
-							
-							<!-- Description -->
-							<p class="text-muted-foreground leading-relaxed">
-								{service.description}
-							</p>
 						</div>
 					</ScrollReveal>
 				{/each}

@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-	--color-background: #000000;
-	--color-surface: #0a0a0a;
-	--color-text-primary: #ffffff;
-	--color-text-secondary: #666666;
-	--color-accent: #ffffff;
+	--color-background: #111111;
+	--color-surface: #0D0D0E;
+	--color-text-primary: #E5E5E2;
+	--color-text-secondary: #A0A0A0;
+	--color-text-body: #888888;
+	--color-accent: #E5E5E2;
+	--color-slash: #666666;
 	
-	--font-sans: 'JetBrains Mono', 'Space Mono', 'Fira Code', Consolas, monospace;
-	--font-mono: 'JetBrains Mono', 'Space Mono', 'Fira Code', Consolas, monospace;
+	--font-display: 'Space Grotesk', sans-serif;
+	--font-mono: 'IBM Plex Mono', monospace;
 	
 	--spacing-section: 80px;
 	--spacing-section-lg: 120px;
@@ -32,7 +32,7 @@ html {
 }
 
 body {
-	font-family: var(--font-sans);
+	font-family: var(--font-mono);
 	background-color: var(--color-background);
 	color: var(--color-text-primary);
 	line-height: 1.6;
@@ -101,12 +101,123 @@ body {
 
 /* Industrial utility classes */
 @layer components {
+	/* Main Logo/Header - Sharp, slim Space Grotesk */
+	.header-title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		line-height: 1;
+		color: var(--color-text-primary);
+	}
+	
+	/* Monospace Subtitles - Tight, airy data look */
+	.sub-text {
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.3em;
+		font-size: 12px;
+		color: var(--color-text-secondary);
+	}
+	
+	/* CTA Button - Industrial style */
+	.cta-button {
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		border: 1px solid #333;
+		padding: 15px 30px;
+		background: transparent;
+		color: var(--color-text-primary);
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	
+	.cta-button:hover {
+		background: var(--color-text-primary);
+		color: var(--color-background);
+		border-color: var(--color-text-primary);
+	}
+	
+	/* Section labels - IBM Plex Mono, uppercase, wide tracking */
+	.section-label {
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.25em;
+		font-size: 11px;
+		color: var(--color-text-secondary);
+	}
+	
+	/* Service card - horizontal divider style */
+	.service-card {
+		border: none;
+		border-top: 1px solid #222;
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+	
+	/* Service title - IBM Plex Mono, uppercase, medium gray */
+	.service-title {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-size: 1.2rem;
+		margin-bottom: 10px;
+		color: #A0A0A0;
+	}
+	
+	/* Service description - dimmed, readable */
+	.service-description {
+		font-family: var(--font-mono);
+		color: #888;
+		line-height: 1.6;
+		font-size: 0.9rem;
+	}
+	
+	/* Section headings - Space Grotesk, uppercase, off-white */
+	.section-heading {
+		font-family: var(--font-display);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		line-height: 1;
+		color: #E5E5E2;
+		font-size: clamp(2rem, 5vw, 3.5rem);
+	}
+	
+	/* Body text - dimmed for hierarchy */
+	.body-text {
+		color: var(--color-text-body);
+		line-height: 1.7;
+	}
+	
+	/* Horizontal divider - replaces card borders */
+	.horizontal-divider {
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+	}
+	
+	/* Split layout - heading on left, content on right */
+	.split-layout {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 4rem;
+		align-items: start;
+	}
+	
+	@media (max-width: 768px) {
+		.split-layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+	}
+	
 	.tech-heading {
 		@apply font-mono uppercase tracking-[0.2em] text-white;
 	}
 	
 	.tech-label {
-		@apply font-mono text-xs uppercase tracking-[0.15em] text-white/60;
+		@apply font-mono uppercase tracking-[0.15em] text-white/60;
 	}
 	
 	.tech-border {

@@ -4,14 +4,17 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				background: '#000000',
-				surface: '#0a0a0a',
-				'text-primary': '#ffffff',
-				'text-secondary': '#666666'
+				background: '#111111',
+				surface: '#0D0D0E',
+				'text-primary': '#E5E5E2',
+				'text-secondary': '#A0A0A0',
+				'text-body': '#888888',
+				'slash': '#666666'
 			},
 			fontFamily: {
-				mono: ['JetBrains Mono', 'Space Mono', 'Fira Code', 'Consolas', 'monospace'],
-				sans: ['JetBrains Mono', 'Space Mono', 'Fira Code', 'Consolas', 'monospace']
+				display: ['Space Grotesk', 'sans-serif'],
+				mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
+				sans: ['IBM Plex Mono', 'Consolas', 'monospace']
 			},
 			fontSize: {
 				hero: ['72px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],

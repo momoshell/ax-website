@@ -23,17 +23,22 @@
 	});
 </script>
 
-<Section id="contact" class="bg-surface/30">
-	<div class="max-w-5xl mx-auto">
+<Section id="contact" class="bg-surface/30 py-24">
+	<div class="max-w-6xl mx-auto px-6">
 		{#if isLoading}
 			<!-- Loading skeleton -->
-			<div class="h-16 w-48 mb-16 animate-pulse bg-surface"></div>
-			<div class="flex gap-16">
-				<div class="flex-1 space-y-6">
+			<div class="split-layout mb-16">
+				<div>
+					<div class="section-label mb-4 w-24 h-3 bg-surface animate-pulse"></div>
+					<div class="section-heading w-48 h-12 bg-surface animate-pulse"></div>
+				</div>
+			</div>
+			<div class="split-layout">
+				<div class="space-y-6">
 					<div class="h-16 bg-surface"></div>
 					<div class="h-16 bg-surface"></div>
 				</div>
-				<div class="flex-1 space-y-4">
+				<div class="space-y-6">
 					<div class="h-6 bg-surface w-24"></div>
 					<div class="h-12 bg-surface"></div>
 					<div class="h-12 bg-surface"></div>
@@ -41,60 +46,48 @@
 				</div>
 			</div>
 		{:else if error}
-			<p class="text-white/60 font-mono text-center">UNABLE TO LOAD CONTACT DATA</p>
+			<p class="body-text font-mono text-center">UNABLE TO LOAD CONTACT DATA</p>
 		{:else if content}
 			<ScrollReveal>
-				<!-- Section header -->
-				<div class="mb-16">
-					<SlashHeading text="CONTACT" />
+				<!-- Split layout header -->
+				<div class="split-layout mb-16">
+					<div>
+						<p class="section-label mb-4">Contact</p>
+						<h2 class="section-heading">
+							GET IN TOUCH
+						</h2>
+					</div>
 				</div>
 				
-				<!-- Two-column layout -->
-				<div class="flex flex-col md:flex-row gap-16 md:gap-24">
-					<!-- Left column - Form style inputs -->
-					<div class="flex-1">
-						<div class="space-y-10">
-							<div>
-								<p class="tech-label block mb-3">EMAIL</p>
-								<div class="border-b border-white/40 py-3">
-									<span class="text-white font-mono text-sm">{content.email}</span>
-								</div>
-							</div>
-							
-							<div>
-								<p class="tech-label block mb-3">WORK DETAILS</p>
-								<div class="border-b border-white/40 py-3">
-									<span class="text-white/40 font-mono text-sm">[INQUIRY DETAILS...]</span>
-								</div>
-							</div>
-						</div>
+				<!-- Two-column layout with split style -->
+				<div class="split-layout">
+					<!-- Left column - Email -->
+					<div>
+						<p class="section-label mb-6">EMAIL</p>
+						<a 
+							href="mailto:{content.email}"
+							class="group block mb-8"
+						>
+							<span class="text-white font-mono text-lg group-hover:text-accent transition-colors">
+								{content.email}
+							</span>
+						</a>
 					</div>
 					
 					<!-- Right column - Contact links -->
-					<div class="flex-1">
-						<p class="tech-label mb-6">CONTACTS</p>
+					<div>
+						<p class="section-label mb-6">CONTACTS</p>
 						
-						<div class="space-y-6">
-							<!-- Email -->
-							<a 
-								href="mailto:{content.email}"
-								class="group block"
-							>
-								<p class="tech-label text-xs mb-1">EMAIL</p>
-								<p class="text-white font-mono text-sm group-hover:text-white/80 transition-colors">
-									{content.email} ↗
-								</p>
-							</a>
-							
+						<div class="space-y-8">
 							<!-- LinkedIn -->
 							<a 
 								href={content.linkedin}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="group block"
+								class="group block horizontal-divider pb-6"
 							>
-								<p class="tech-label text-xs mb-1">LINKEDIN</p>
-								<p class="text-white font-mono text-sm group-hover:text-white/80 transition-colors">
+								<p class="section-label mb-2">LINKEDIN</p>
+								<p class="text-white font-mono group-hover:text-accent transition-colors">
 									@axlabs ↗
 								</p>
 							</a>
@@ -104,18 +97,18 @@
 								href={content.github}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="group block"
+								class="group block horizontal-divider pb-6"
 							>
-								<p class="tech-label text-xs mb-1">GITHUB</p>
-								<p class="text-white font-mono text-sm group-hover:text-white/80 transition-colors">
+								<p class="section-label mb-2">GITHUB</p>
+								<p class="text-white font-mono group-hover:text-accent transition-colors">
 									@axlabs ↗
 								</p>
 							</a>
 							
 							<!-- Location -->
-							<div class="block">
-								<p class="tech-label text-xs mb-1">LOCATION</p>
-								<p class="text-white font-mono text-sm">{content.location}</p>
+							<div class="horizontal-divider pb-6">
+								<p class="section-label mb-2">LOCATION</p>
+								<p class="text-white font-mono">{content.location}</p>
 							</div>
 						</div>
 					</div>
@@ -123,10 +116,13 @@
 				
 				<!-- Body text -->
 				{#if content.body}
-					<div class="mt-16 max-w-2xl">
-						<p class="text-white/60 font-mono text-sm leading-relaxed">
-							{content.body}
-						</p>
+					<div class="split-layout mt-16">
+						<div></div>
+						<div>
+							<p class="body-text text-lg leading-relaxed max-w-2xl">
+								{content.body}
+							</p>
+						</div>
 					</div>
 				{/if}
 			</ScrollReveal>

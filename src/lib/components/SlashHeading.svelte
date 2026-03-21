@@ -7,6 +7,6 @@
 	let { text, class: className = '' }: Props = $props();
 </script>
 
-<h2 class="tech-heading {className}">
-	<span class="text-white/40">/</span>{text}
+<h2 class="{className}">
+	<span class="text-[#666666]">/</span>{text}
 </h2>
