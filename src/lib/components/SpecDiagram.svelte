@@ -151,37 +151,36 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 		function drawRadar(t: number) {
 			const sweepAngle = t * 0.8;
 
-			// Concentric rings
+			// Concentric rings - make very prominent
 			for (let r = 15; r <= 50; r += 12) {
 				ctx!.beginPath();
 				ctx!.arc(C, C, r, 0, Math.PI * 2);
-				ctx!.strokeStyle = 'rgba(200,210,225,0.35)';
-				ctx!.lineWidth = 1.2;
+				ctx!.strokeStyle = 'rgba(255,255,255,0.7)';
+				ctx!.lineWidth = 2.5;
 				ctx!.stroke();
 			}
 
-			// Cross lines
-			ctx!.strokeStyle = 'rgba(200,210,225,0.28)';
-			ctx!.lineWidth = 1.0;
+			// Cross lines - make very prominent
+			ctx!.strokeStyle = 'rgba(255,255,255,0.5)';
+			ctx!.lineWidth = 2;
 			ctx!.beginPath();
-			ctx!.moveTo(C - 55, C);
-			ctx!.lineTo(C + 55, C);
+			ctx!.moveTo(C - 60, C);
+			ctx!.lineTo(C + 60, C);
 			ctx!.stroke();
 			ctx!.beginPath();
-			ctx!.moveTo(C, C - 55);
-			ctx!.lineTo(C, C + 55);
+			ctx!.moveTo(C, C - 60);
+			ctx!.lineTo(C, C + 60);
 			ctx!.stroke();
 
-			// Sweep line
-			ctx!.strokeStyle = 'rgba(210,218,230,0.85)';
-			ctx!.lineWidth = 1.5;
+			// Sweep line - very bright
+			ctx!.strokeStyle = 'rgba(255,255,255,0.95)';
+			ctx!.lineWidth = 3;
 			ctx!.beginPath();
 			ctx!.moveTo(C, C);
-			ctx!.lineTo(C + Math.cos(sweepAngle) * 50, C + Math.sin(sweepAngle) * 50);
+			ctx!.lineTo(C + Math.cos(sweepAngle) * 55, C + Math.sin(sweepAngle) * 55);
 			ctx!.stroke();
-			ctx!.lineWidth = 0.6;
 
-			// Data blips
+			// Data blips - big and bright
 			const blips = [
 				[20, 0.5],
 				[35, 1.8],
@@ -193,13 +192,9 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 				const a = aOff + t * 0.1;
 				const x = C + Math.cos(a) * r;
 				const y = C + Math.sin(a) * r;
-				const dist =
-					((sweepAngle % (Math.PI * 2)) - (a % (Math.PI * 2)) + Math.PI * 4) %
-					(Math.PI * 2);
-				const brightness = dist < 1 ? (1 - dist) * 0.9 : 0.45;
 				ctx!.beginPath();
-				ctx!.arc(x, y, 3, 0, Math.PI * 2);
-				ctx!.fillStyle = `rgba(210,218,230,${brightness})`;
+				ctx!.arc(x, y, 5, 0, Math.PI * 2);
+				ctx!.fillStyle = 'rgba(255,255,255,0.9)';
 				ctx!.fill();
 			});
 		}
