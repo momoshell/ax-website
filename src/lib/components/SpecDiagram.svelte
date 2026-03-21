@@ -151,36 +151,36 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 		function drawRadar(t: number) {
 			const sweepAngle = t * 0.8;
 
-			// Concentric rings - make very prominent
+			// Concentric rings - subtle
 			for (let r = 15; r <= 50; r += 12) {
 				ctx!.beginPath();
 				ctx!.arc(C, C, r, 0, Math.PI * 2);
-				ctx!.strokeStyle = 'rgba(255,255,255,0.7)';
-				ctx!.lineWidth = 2.5;
+				ctx!.strokeStyle = 'rgba(200,210,225,0.25)';
+				ctx!.lineWidth = 0.8;
 				ctx!.stroke();
 			}
 
-			// Cross lines - make very prominent
-			ctx!.strokeStyle = 'rgba(255,255,255,0.5)';
-			ctx!.lineWidth = 2;
+			// Cross lines - subtle
+			ctx!.strokeStyle = 'rgba(200,210,225,0.2)';
+			ctx!.lineWidth = 0.6;
 			ctx!.beginPath();
-			ctx!.moveTo(C - 60, C);
-			ctx!.lineTo(C + 60, C);
+			ctx!.moveTo(C - 50, C);
+			ctx!.lineTo(C + 50, C);
 			ctx!.stroke();
 			ctx!.beginPath();
-			ctx!.moveTo(C, C - 60);
-			ctx!.lineTo(C, C + 60);
+			ctx!.moveTo(C, C - 50);
+			ctx!.lineTo(C, C + 50);
 			ctx!.stroke();
 
-			// Sweep line - very bright
-			ctx!.strokeStyle = 'rgba(255,255,255,0.95)';
-			ctx!.lineWidth = 3;
+			// Sweep line - moderate brightness
+			ctx!.strokeStyle = 'rgba(210,220,235,0.6)';
+			ctx!.lineWidth = 1.2;
 			ctx!.beginPath();
 			ctx!.moveTo(C, C);
-			ctx!.lineTo(C + Math.cos(sweepAngle) * 55, C + Math.sin(sweepAngle) * 55);
+			ctx!.lineTo(C + Math.cos(sweepAngle) * 50, C + Math.sin(sweepAngle) * 50);
 			ctx!.stroke();
 
-			// Data blips - big and bright
+			// Data blips - small and subtle with pulse
 			const blips = [
 				[20, 0.5],
 				[35, 1.8],
@@ -192,9 +192,10 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 				const a = aOff + t * 0.1;
 				const x = C + Math.cos(a) * r;
 				const y = C + Math.sin(a) * r;
+				const pulse = Math.sin(t * 2 + aOff) * 0.5 + 0.5;
 				ctx!.beginPath();
-				ctx!.arc(x, y, 5, 0, Math.PI * 2);
-				ctx!.fillStyle = 'rgba(255,255,255,0.9)';
+				ctx!.arc(x, y, 2 + pulse, 0, Math.PI * 2);
+				ctx!.fillStyle = `rgba(210,220,235,${0.4 + pulse * 0.4})`;
 				ctx!.fill();
 			});
 		}
