@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import { loadContent } from '$lib/content';
 	import type { ContactContent } from '$lib/types';
 
@@ -21,52 +22,66 @@
 </script>
 
 <section class="section pt-16 md:pt-20" id="contact">
-	<div>
-		<div class="section-eyebrow sr">CONTACT</div>
-		<div class="section-title sr" style="transition-delay: 0.1s">GET IN<br>TOUCH</div>
-	</div>
+	<ScrollReveal>
+		<div>
+			<div class="section-eyebrow sr">CONTACT</div>
+			<div class="section-title sr" style="transition-delay: 0.1s">GET IN<br>TOUCH</div>
+		</div>
+	</ScrollReveal>
 
 	<div class="contact-grid">
 		<div>
-			<div class="contact-block sr" style="transition-delay: 0.2s">
-				<div class="contact-label">EMAIL</div>
-				<div class="contact-value">
-					<a href="mailto:{content?.email || 'hello@axlabs.ai'}">{content?.email || 'hello@axlabs.ai'}</a>
+			<ScrollReveal>
+				<div class="contact-block sr" style="transition-delay: 0.2s">
+					<div class="contact-label">EMAIL</div>
+					<div class="contact-value">
+						<a href="mailto:{content?.email || 'hello@axlabs.ai'}">{content?.email || 'hello@axlabs.ai'}</a>
+					</div>
 				</div>
-			</div>
+			</ScrollReveal>
 		</div>
 		<div>
-			<div class="contact-block sr" style="transition-delay: 0.25s">
-				<div class="contact-label">CONTACTS</div>
-				<div class="sr-line" style="transition-delay: 0.3s"></div>
-			</div>
-
-			<div class="contact-block sr" style="transition-delay: 0.3s">
-				<div class="contact-label">LINKEDIN</div>
-				<div class="contact-value">
-					<a href={content?.linkedin || '#'} target="_blank" rel="noopener noreferrer">
-						@axlabs <span class="external-icon">↗</span>
-					</a>
+			<ScrollReveal>
+				<div class="contact-block sr" style="transition-delay: 0.25s">
+					<div class="contact-label">CONTACTS</div>
+					<div class="sr-line" style="transition-delay: 0.3s"></div>
 				</div>
-			</div>
+			</ScrollReveal>
 
-			<div class="contact-block sr" style="transition-delay: 0.35s">
-				<div class="contact-label">GITHUB</div>
-				<div class="contact-value">
-					<a href={content?.github || '#'} target="_blank" rel="noopener noreferrer">
-						@axlabs <span class="external-icon">↗</span>
-					</a>
+			<ScrollReveal>
+				<div class="contact-block sr" style="transition-delay: 0.3s">
+					<div class="contact-label">LINKEDIN</div>
+					<div class="contact-value">
+						<a href={content?.linkedin || '#'} target="_blank" rel="noopener noreferrer">
+							@axlabs <span class="external-icon">↗</span>
+						</a>
+					</div>
 				</div>
-			</div>
+			</ScrollReveal>
 
-			<div class="contact-block sr" style="transition-delay: 0.4s">
-				<div class="contact-label">LOCATION</div>
-				<div class="contact-value">{content?.location || 'Global · Remote-First'}</div>
-			</div>
+			<ScrollReveal>
+				<div class="contact-block sr" style="transition-delay: 0.35s">
+					<div class="contact-label">GITHUB</div>
+					<div class="contact-value">
+						<a href={content?.github || '#'} target="_blank" rel="noopener noreferrer">
+							@axlabs <span class="external-icon">↗</span>
+						</a>
+					</div>
+				</div>
+			</ScrollReveal>
 
-			<div class="contact-cta sr" style="transition-delay: 0.45s">
-				{content?.body || 'Ready to explore how AI can transform your hardware products or operations? We\'d love to hear from you. Reach out and let\'s discuss your challenges, ideas, and goals.'}
-			</div>
+			<ScrollReveal>
+				<div class="contact-block sr" style="transition-delay: 0.4s">
+					<div class="contact-label">LOCATION</div>
+					<div class="contact-value">{content?.location || 'Global · Remote-First'}</div>
+				</div>
+			</ScrollReveal>
+
+			<ScrollReveal>
+				<div class="contact-cta sr" style="transition-delay: 0.45s">
+					{content?.body || 'Ready to explore how AI can transform your hardware products or operations? We\'d love to hear from you. Reach out and let\'s discuss your challenges, ideas, and goals.'}
+				</div>
+			</ScrollReveal>
 		</div>
 	</div>
 </section>
