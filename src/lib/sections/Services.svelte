@@ -64,7 +64,7 @@
 		{
 			number: '04',
 			codename: 'AXL-CONSULT',
-			diagramShape: 'radar' as const,
+			diagramShape: 'circuit' as const,
 			meta: { type: 'STRATEGY', status: 'ACTIVE', ref: '0xD4' }
 		}
 	];
