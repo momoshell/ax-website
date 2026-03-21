@@ -103,7 +103,7 @@
 	</div>
 
 	{#if isLoading}
-		<div class="about-wrapper max-w-6xl mx-auto px-6">
+		<div class="about-wrapper max-w-6xl mx-auto">
 			<div class="about-loading">
 				<div class="w-32 h-3 bg-surface animate-pulse mb-4"></div>
 				<div class="w-48 h-12 bg-surface animate-pulse mb-8"></div>
@@ -120,7 +120,7 @@
 		</div>
 	{:else if content}
 		<ScrollReveal>
-			<div class="about-wrapper max-w-6xl mx-auto px-6">
+			<div class="about-wrapper max-w-6xl mx-auto">
 				<!-- Corner brackets -->
 				<div class="about-bracket-bl"></div>
 				<div class="about-bracket-br"></div>
