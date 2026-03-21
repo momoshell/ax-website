@@ -343,7 +343,7 @@
 		</div>
 		<div class="cell">
 			<div class="cell-label">DESIGNER <span class="slashes">///////////////</span></div>
-			<div class="cell-value">INTEL TSCAVE</div>
+			<div class="cell-value">C'TAN</div>
 		</div>
 		<div class="cell">
 			<div class="cell-label">TIME <span class="slashes">/////////////////</span></div>
