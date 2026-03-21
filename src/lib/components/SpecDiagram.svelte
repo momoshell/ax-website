@@ -44,7 +44,7 @@
 				nodePositions[l].forEach((a, ai) => {
 					nodePositions[l + 1].forEach((b, bi) => {
 						const pulse = Math.sin(t * 2 + l + ai * 0.5 + bi * 0.3) * 0.5 + 0.5;
-						ctx!.strokeStyle = `rgba(200,210,225,${0.06 + pulse * 0.12})`;
+						ctx!.strokeStyle = `rgba(200,210,225,${0.15 + pulse * 0.25})`;
 						ctx!.lineWidth = 0.6;
 						ctx!.beginPath();
 						ctx!.moveTo(a.x, a.y);
@@ -60,7 +60,7 @@
 					const pulse = Math.sin(t * 1.5 + li + ni) * 0.5 + 0.5;
 					ctx!.beginPath();
 					ctx!.arc(p.x, p.y, 2 + pulse * 1.5, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${0.3 + pulse * 0.4})`;
+					ctx!.fillStyle = `rgba(210,218,230,${0.5 + pulse * 0.45})`;
 					ctx!.fill();
 				});
 			});
@@ -79,7 +79,7 @@
 
 					// Horizontal connection
 					if (x < grid - 1) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.05 + pulse * 0.1})`;
+						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.2})`;
 						ctx!.lineWidth = 0.6;
 						ctx!.beginPath();
 						ctx!.moveTo(px, py);
@@ -89,7 +89,7 @@
 
 					// Vertical connection
 					if (y < grid - 1) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.05 + pulse * 0.08})`;
+						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.15})`;
 						ctx!.lineWidth = 0.6;
 						ctx!.beginPath();
 						ctx!.moveTo(px, py);
@@ -101,7 +101,7 @@
 					const isActive = (x + y + Math.floor(t)) % 3 === 0;
 					ctx!.beginPath();
 					ctx!.arc(px, py, isActive ? 3 : 1.5, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${isActive ? 0.6 : 0.15})`;
+					ctx!.fillStyle = `rgba(210,218,230,${isActive ? 0.85 : 0.35})`;
 					ctx!.fill();
 				}
 			}
@@ -122,7 +122,7 @@
 
 					// Connect to center for inner rings
 					if (li > 0) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.04 + pulse * 0.06})`;
+						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.18})`;
 						ctx!.lineWidth = 0.6;
 						ctx!.beginPath();
 						ctx!.moveTo(C, C);
@@ -132,7 +132,7 @@
 
 					ctx!.beginPath();
 					ctx!.arc(x, y, 1.5 + pulse, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${0.2 + pulse * 0.35})`;
+					ctx!.fillStyle = `rgba(210,218,230,${0.45 + pulse * 0.4})`;
 					ctx!.fill();
 				}
 
@@ -140,7 +140,7 @@
 				if (r > 0) {
 					ctx!.beginPath();
 					ctx!.arc(C, C, r, 0, Math.PI * 2);
-					ctx!.strokeStyle = 'rgba(200,210,225,0.06)';
+ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 					ctx!.lineWidth = 0.6;
 					ctx!.stroke();
 				}
@@ -155,13 +155,13 @@
 			for (let r = 15; r <= 50; r += 12) {
 				ctx!.beginPath();
 				ctx!.arc(C, C, r, 0, Math.PI * 2);
-				ctx!.strokeStyle = 'rgba(200,210,225,0.06)';
+				ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 				ctx!.lineWidth = 0.6;
 				ctx!.stroke();
 			}
 
 			// Cross lines
-			ctx!.strokeStyle = 'rgba(200,210,225,0.05)';
+			ctx!.strokeStyle = 'rgba(200,210,225,0.12)';
 			ctx!.lineWidth = 0.6;
 			ctx!.beginPath();
 			ctx!.moveTo(C - 55, C);
@@ -173,7 +173,7 @@
 			ctx!.stroke();
 
 			// Sweep line
-			ctx!.strokeStyle = 'rgba(210,218,230,0.3)';
+			ctx!.strokeStyle = 'rgba(210,218,230,0.5)';
 			ctx!.lineWidth = 0.8;
 			ctx!.beginPath();
 			ctx!.moveTo(C, C);
@@ -196,7 +196,7 @@
 				const dist =
 					((sweepAngle % (Math.PI * 2)) - (a % (Math.PI * 2)) + Math.PI * 4) %
 					(Math.PI * 2);
-				const brightness = dist < 1 ? (1 - dist) * 0.7 : 0.08;
+				const brightness = dist < 1 ? (1 - dist) * 0.7 : 0.2;
 				ctx!.beginPath();
 				ctx!.arc(x, y, 2, 0, Math.PI * 2);
 				ctx!.fillStyle = `rgba(210,218,230,${brightness})`;
