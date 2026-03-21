@@ -274,7 +274,7 @@
 		left: 0;
 		width: 100%;
 		height: 1px;
-		background: rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.02);
 	}
 
 	.spec-crosshair::after {
@@ -284,6 +284,6 @@
 		top: 0;
 		width: 1px;
 		height: 100%;
-		background: rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.02);
 	}
 </style>
