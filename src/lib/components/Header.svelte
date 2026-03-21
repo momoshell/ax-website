@@ -9,9 +9,9 @@
 
 	// Navigation links
 	const navLinks = [
-		{ id: 'services', label: 'Services' },
-		{ id: 'about', label: 'About' },
-		{ id: 'contact', label: 'Contact' }
+		{ id: 'services', label: 'SERVICES' },
+		{ id: 'about', label: 'ABOUT' },
+		{ id: 'contact', label: 'CONTACT' }
 	];
 
 	function handleNavClick(sectionId: string) {
@@ -44,7 +44,7 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<header class="fixed top-0 left-0 right-0 z-40 h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-border/10">
+<header class="fixed top-0 left-0 right-0 z-40 h-16 md:h-20 bg-background/80 backdrop-blur-md border-b border-white/20">
 	<nav class="container mx-auto h-full px-4 md:px-6 lg:px-8 flex items-center justify-between" aria-label="Main navigation">
 		<!-- Logo -->
 		<a
@@ -53,7 +53,7 @@
 				e.preventDefault();
 				handleLogoClick();
 			}}
-			class="font-mono font-bold text-lg text-accent hover:text-accent/80 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+			class="tech-heading font-bold text-lg text-white hover:text-white/80 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
 		>
 			A&X LABS
 		</a>
@@ -73,7 +73,7 @@
 		<!-- Mobile Menu Button -->
 		<button
 			type="button"
-			class="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+			class="md:hidden p-2 text-white/60 hover:text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
 			onclick={toggleMobileMenu}
 			aria-expanded={isMobileMenuOpen}
 			aria-controls="mobile-menu"
@@ -108,16 +108,16 @@
 	<!-- Mobile Menu Drawer -->
 	<div
 		id="mobile-menu"
-		class="fixed top-0 right-0 z-50 w-80 max-w-full h-full bg-surface border-l border-border/10 md:hidden"
+		class="fixed top-0 right-0 z-50 w-80 max-w-full h-full bg-surface border-l border-white/20 md:hidden"
 		transition:slide={{ duration: 300, axis: 'x' }}
 	>
 		<div class="flex flex-col h-full">
 			<!-- Mobile Menu Header -->
-			<div class="flex items-center justify-between h-16 md:h-20 px-4 border-b border-border/10">
-				<span class="font-mono font-bold text-lg text-accent">A&X LABS</span>
+			<div class="flex items-center justify-between h-16 md:h-20 px-4 border-b border-white/20">
+				<span class="tech-heading font-bold text-lg text-white">A&X LABS</span>
 				<button
 					type="button"
-					class="p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
+					class="p-2 text-white/60 hover:text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
 					onclick={() => (isMobileMenuOpen = false)}
 					aria-label="Close menu"
 				>
@@ -138,12 +138,9 @@
 								e.preventDefault();
 								handleNavClick('hero');
 							}}
-							class="block px-6 py-4 text-lg font-medium border-b border-border/10 transition-colors duration-200 focus-visible:outline-none focus-visible:bg-surface/50"
-							class:text-accent={$activeSection === 'hero'}
-							class:text-muted-foreground={$activeSection !== 'hero'}
-							class:hover:text-foreground={$activeSection !== 'hero'}
+							class="block px-6 py-4 text-sm font-medium border-b border-white/10 transition-colors duration-200 focus-visible:outline-none focus-visible:bg-surface/50 tech-label {$activeSection === 'hero' ? 'text-white' : 'text-white/60'}"
 						>
-							Home
+							HOME
 						</a>
 					</li>
 					{#each navLinks as link (link.id)}
@@ -154,10 +151,7 @@
 									e.preventDefault();
 									handleNavClick(link.id);
 								}}
-								class="block px-6 py-4 text-lg font-medium border-b border-border/10 transition-colors duration-200 focus-visible:outline-none focus-visible:bg-surface/50"
-								class:text-accent={$activeSection === link.id}
-								class:text-muted-foreground={$activeSection !== link.id}
-								class:hover:text-foreground={$activeSection !== link.id}
+								class="block px-6 py-4 text-sm font-medium border-b border-white/10 transition-colors duration-200 focus-visible:outline-none focus-visible:bg-surface/50 tech-label {$activeSection === link.id ? 'text-white' : 'text-white/60'}"
 							>
 								{link.label}
 							</a>

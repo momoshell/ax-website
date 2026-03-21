@@ -8,6 +8,8 @@
 	}
 
 	let { href, label, isActive = false, onclick, class: className = '' }: Props = $props();
+
+	const linkClass = $derived(isActive ? 'text-white' : 'text-white/60 hover:text-white');
 </script>
 
 <a
@@ -16,10 +18,7 @@
 		e.preventDefault();
 		onclick?.();
 	}}
-	class="text-sm font-medium transition-colors duration-200 {className}"
-	class:text-accent={isActive}
-	class:text-muted-foreground={!isActive}
-	class:hover:text-foreground={!isActive}
+	class="tech-label transition-colors duration-200 {linkClass} {className}"
 >
 	{label}
 </a>

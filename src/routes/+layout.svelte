@@ -6,6 +6,7 @@
 	import StructuredData from '$lib/components/StructuredData.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import SkipLink from '$lib/components/SkipLink.svelte';
+	import TechnicalLayout from '$lib/components/TechnicalLayout.svelte';
 	import { setupIntersectionObserver } from '$lib/utils/scroll';
 	import { updateActiveSection } from '$lib/stores/navigation';
 	import { PRELOADER_SESSION_KEY } from '$lib/constants';
@@ -62,21 +63,25 @@
 
 <!-- Main content with fade-in -->
 {#if showContent}
-	<div
-		class="min-h-screen bg-background"
-		in:fade={{ duration: 400, delay: 50 }}
-	>
-		<!-- Skip to main content link for accessibility -->
-		<SkipLink />
+	<TechnicalLayout>
+		<div
+			class="min-h-screen bg-background"
+			in:fade={{ duration: 400, delay: 50 }}
+		>
+			<!-- Skip to main content link for accessibility -->
+			<SkipLink />
 
-		<!-- Fixed Header -->
-		<Header />
+			<!-- Fixed Header -->
+			<Header />
 
-		<!-- Main content with padding-top for fixed header -->
-		<main class="relative pt-16 md:pt-20">
-			{@render children()}
-		</main>
-	</div>
+			<!-- Main content with padding-top for fixed header -->
+			<main class="relative pt-16 md:pt-20">
+				{@render children()}
+			</main>
+		</div>
+	</TechnicalLayout>
 {:else}
-	<div class="min-h-screen bg-background"></div>
+	<TechnicalLayout>
+		<div class="min-h-screen bg-background"></div>
+	</TechnicalLayout>
 {/if}

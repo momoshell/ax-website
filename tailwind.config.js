@@ -4,15 +4,14 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				background: '#0a0a0a',
-				surface: '#141414',
-				'text-primary': '#fafafa',
-				'text-secondary': '#737373',
-				accent: '#3b82f6'
+				background: '#000000',
+				surface: '#0a0a0a',
+				'text-primary': '#ffffff',
+				'text-secondary': '#666666'
 			},
 			fontFamily: {
-				mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
-				sans: ['Inter', 'system-ui', 'sans-serif']
+				mono: ['JetBrains Mono', 'Space Mono', 'Fira Code', 'Consolas', 'monospace'],
+				sans: ['JetBrains Mono', 'Space Mono', 'Fira Code', 'Consolas', 'monospace']
 			},
 			fontSize: {
 				hero: ['72px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
@@ -28,7 +27,7 @@ export default {
 				sharp: '0px'
 			},
 			backgroundImage: {
-				'grid-pattern': 'linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px)'
+				'grid-pattern': 'linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)'
 			},
 			backgroundSize: {
 				'grid': '50px 50px'

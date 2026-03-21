@@ -1,16 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-	--color-background: #0a0a0a;
-	--color-surface: #141414;
-	--color-text-primary: #fafafa;
-	--color-text-secondary: #737373;
-	--color-accent: #3b82f6;
+	--color-background: #000000;
+	--color-surface: #0a0a0a;
+	--color-text-primary: #ffffff;
+	--color-text-secondary: #666666;
+	--color-accent: #ffffff;
 	
-	--font-sans: 'Inter', system-ui, sans-serif;
-	--font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+	--font-sans: 'JetBrains Mono', 'Space Mono', 'Fira Code', Consolas, monospace;
+	--font-mono: 'JetBrains Mono', 'Space Mono', 'Fira Code', Consolas, monospace;
 	
 	--spacing-section: 80px;
 	--spacing-section-lg: 120px;
@@ -53,13 +55,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--color-accent);
+	background: var(--color-text-primary);
 }
 
 /* Selection */
 ::selection {
 	background-color: var(--color-accent);
-	color: var(--color-text-primary);
+	color: var(--color-background);
 }
 
 /* Focus styles */
@@ -88,13 +90,35 @@ body {
 
 /* Subtle glow effect for accent elements */
 .glow-accent {
-	box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+	box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
 
 /* Focus visible styles for accessibility */
 *:focus-visible {
-	outline: 2px solid hsl(var(--accent));
+	outline: 2px solid var(--color-text-primary);
 	outline-offset: 2px;
+}
+
+/* Industrial utility classes */
+@layer components {
+	.tech-heading {
+		@apply font-mono uppercase tracking-[0.2em] text-white;
+	}
+	
+	.tech-label {
+		@apply font-mono text-xs uppercase tracking-[0.15em] text-white/60;
+	}
+	
+	.tech-border {
+		@apply border border-white/20;
+	}
+	
+	.tech-grid-bg {
+		background-image: 
+			linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+		background-size: 50px 50px;
+	}
 }
 
 /* Reduced motion */
