@@ -8,7 +8,7 @@
 	let content = $state<ServicesContent | null>(null);
 	let isLoading = $state(true);
 	let error = $state<string | null>(null);
-	let rulerVisible = $state(false);
+	let rulerVisible = $state(true);
 
 	onMount(() => {
 		loadContent('services')
@@ -102,7 +102,7 @@
 			</div>
 
 			<!-- Ruler bar with tick marks -->
-			<div class="ruler-bar mb-10 h-5 relative" class:visible={rulerVisible}>
+			<div class="ruler-bar visible mb-10 h-5 relative">
 				<div class="absolute inset-x-0 bottom-0 h-px bg-line-faint"></div>
 				<!-- Tick marks -->
 				<div class="absolute inset-x-0 bottom-0 flex justify-between px-0">
