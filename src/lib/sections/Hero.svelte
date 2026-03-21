@@ -127,7 +127,7 @@
 
 	<!-- HUD Cards -->
 	<HUDCard position="tl" label="STATUS" value="ONLINE" slashes="////////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="tr" label="TIME" value={currentTime} slashes="////////////////////" visible={hudCardsVisible} />
+	<HUDCard position="tr" label="SECURITY" value="ENCRYPTED" slashes="////////////////////" visible={hudCardsVisible} />
 	<HUDCard position="bl" label="NODE" value="0xAF91.ACTIVE" slashes="////////////////////////" visible={hudCardsVisible} />
 	<HUDCard position="br" label="VERSION" value="V2.4.1" slashes="////////////////////" visible={hudCardsVisible} />
 	<HUDGrid />
