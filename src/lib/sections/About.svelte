@@ -23,7 +23,7 @@
 	});
 </script>
 
-<Section id="about">
+<Section id="about" class="pt-16 md:pt-20">
 	<div class="max-w-6xl mx-auto px-6 mb-12">
 		<p class="section-label mb-6">About</p>
 	</div>

@@ -20,7 +20,7 @@
 	});
 </script>
 
-<section class="section" id="contact">
+<section class="section pt-16 md:pt-20" id="contact">
 	<div>
 		<div class="section-eyebrow sr">CONTACT</div>
 		<div class="section-title sr" style="transition-delay: 0.1s">GET IN<br>TOUCH</div>

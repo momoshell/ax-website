@@ -74,8 +74,8 @@
 			<!-- Fixed Header -->
 			<Header />
 
-			<!-- Main content with padding-top for fixed header -->
-			<main class="relative pt-16 md:pt-20">
+			<!-- Main content -->
+			<main class="relative">
 				{@render children()}
 			</main>
 
