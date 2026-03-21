@@ -20,6 +20,80 @@
 				error = err instanceof Error ? err.message : 'Failed to load about content';
 				isLoading = false;
 			});
+
+		// Starburst and barcode animation
+		setTimeout(() => {
+			// Starburst
+			const sc = document.getElementById('aboutBarStarburst') as HTMLCanvasElement | null;
+			if (sc) {
+				const ctx = sc.getContext('2d');
+				if (ctx) {
+					const S = 80, C = 40;
+					const localCtx = ctx;
+					let animId: number;
+					function drawStar() {
+						localCtx.clearRect(0, 0, S, S);
+						const t = performance.now() * 0.001;
+						localCtx.strokeStyle = 'rgba(200,210,225,0.35)';
+						localCtx.lineWidth = 0.6;
+						const n = 10;
+						for (let i = 0; i < n; i++) {
+							const a = (Math.PI * 2 / n) * i + t * 0.2;
+							localCtx.beginPath();
+							localCtx.moveTo(C, C);
+							localCtx.lineTo(C + Math.cos(a) * 32, C + Math.sin(a) * 32);
+							localCtx.stroke();
+							localCtx.beginPath();
+							localCtx.arc(C + Math.cos(a) * 32, C + Math.sin(a) * 32, 1.5, 0, Math.PI * 2);
+							localCtx.fillStyle = 'rgba(200,210,225,0.3)';
+							localCtx.fill();
+						}
+						localCtx.beginPath();
+						localCtx.arc(C, C, 3, 0, Math.PI * 2);
+						localCtx.fillStyle = 'rgba(200,210,225,0.5)';
+						localCtx.fill();
+						animId = requestAnimationFrame(drawStar);
+					}
+					drawStar();
+					return () => cancelAnimationFrame(animId);
+				}
+			}
+
+			// Barcode
+			const bc = document.getElementById('aboutBarBarcode') as HTMLCanvasElement | null;
+			if (bc) {
+				const ctx = bc.getContext('2d');
+				if (ctx) {
+					const W = 130, H = 28, n = 35;
+					const localCtx = ctx;
+					const bars = Array.from({ length: n }, () => ({
+						w: Math.random() > 0.5 ? Math.random() * 3 + 1.5 : Math.random() * 1.5 + 0.5,
+						phase: Math.random() * Math.PI * 2,
+						speed: 0.4 + Math.random() * 0.8,
+						x: 0
+					}));
+					let xPos = 0;
+					bars.forEach(b => { b.x = xPos; xPos += b.w + 1.2; });
+					const scale = W / xPos;
+					let animId: number;
+					function drawBC() {
+						localCtx.clearRect(0, 0, W, H);
+						const t = performance.now() * 0.001;
+						bars.forEach(b => {
+							const wave = Math.sin(t * b.speed + b.phase);
+							const w = Math.max(0.5, b.w + wave * 0.6) * scale;
+							const x = b.x * scale;
+							const alpha = 0.2 + (wave * 0.5 + 0.5) * 0.15;
+							localCtx.fillStyle = `rgba(232,230,227,${alpha})`;
+							localCtx.fillRect(x, 0, w, H);
+						});
+						animId = requestAnimationFrame(drawBC);
+					}
+					drawBC();
+					return () => cancelAnimationFrame(animId);
+				}
+			}
+		}, 100);
 	});
 </script>
 
@@ -115,28 +189,9 @@
 					<div class="reg-dot rd-dr"></div>
 					<ScrollReveal>
 						<div class="about-data-starburst">
-							<svg width="80" height="80" viewBox="0 0 80 80" class="starburst-svg">
-								{#each Array(10) as _, i (i)}
-									<line
-										x1="40"
-										y1="40"
-										x2={40 + 35 * Math.cos((Math.PI * 2 / 10) * i)}
-										y2={40 + 35 * Math.sin((Math.PI * 2 / 10) * i)}
-										stroke="rgba(200,210,225,0.35)"
-										stroke-width="0.6"
-									/>
-								{/each}
-								<circle cx="40" cy="40" r="12" fill="none" stroke="rgba(200,210,225,0.25)" stroke-width="0.5" />
-								<circle cx="40" cy="40" r="3" fill="rgba(200,210,225,0.4)" />
-							</svg>
+							<canvas id="aboutBarStarburst" width="80" height="80"></canvas>
 							<div>
-								<svg width="130" height="28" viewBox="0 0 130 28" class="barcode">
-									{#each Array(65) as _, i (i)}
-										{#if (i * 7 + i * 3) % 2 === 0}
-											<rect x={i * 2} y="0" width="1.5" height="20" fill="rgba(255,255,255,0.25)" />
-										{/if}
-									{/each}
-								</svg>
+								<canvas id="aboutBarBarcode" width="130" height="28"></canvas>
 								<div class="barcode-label">A&X LABS</div>
 							</div>
 						</div>
@@ -497,20 +552,8 @@
 		border-right: 1px solid rgba(255, 255, 255, 0.04);
 	}
 
-	.starburst-svg {
-		animation: rotate 20s linear infinite;
-	}
-
-	@keyframes rotate {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.barcode {
+	#aboutBarStarburst,
+	#aboutBarBarcode {
 		display: block;
 	}
 
