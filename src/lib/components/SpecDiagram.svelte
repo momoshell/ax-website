@@ -155,14 +155,14 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 			for (let r = 15; r <= 50; r += 12) {
 				ctx!.beginPath();
 				ctx!.arc(C, C, r, 0, Math.PI * 2);
-ctx!.strokeStyle = 'rgba(200,210,225,0.35)';
-				ctx!.lineWidth = 0.6;
+				ctx!.strokeStyle = 'rgba(200,210,225,0.35)';
+				ctx!.lineWidth = 1.2;
 				ctx!.stroke();
 			}
 
 			// Cross lines
 			ctx!.strokeStyle = 'rgba(200,210,225,0.28)';
-			ctx!.lineWidth = 0.6;
+			ctx!.lineWidth = 1.0;
 			ctx!.beginPath();
 			ctx!.moveTo(C - 55, C);
 			ctx!.lineTo(C + 55, C);
@@ -174,7 +174,7 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.35)';
 
 			// Sweep line
 			ctx!.strokeStyle = 'rgba(210,218,230,0.85)';
-			ctx!.lineWidth = 0.8;
+			ctx!.lineWidth = 1.5;
 			ctx!.beginPath();
 			ctx!.moveTo(C, C);
 			ctx!.lineTo(C + Math.cos(sweepAngle) * 50, C + Math.sin(sweepAngle) * 50);
@@ -198,7 +198,7 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.35)';
 					(Math.PI * 2);
 				const brightness = dist < 1 ? (1 - dist) * 0.9 : 0.45;
 				ctx!.beginPath();
-				ctx!.arc(x, y, 2, 0, Math.PI * 2);
+				ctx!.arc(x, y, 3, 0, Math.PI * 2);
 				ctx!.fillStyle = `rgba(210,218,230,${brightness})`;
 				ctx!.fill();
 			});
