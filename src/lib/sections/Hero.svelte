@@ -145,7 +145,7 @@
 		</div>
 		
 		<div class="sub-label" class:visible={subLabelVisible}>A&amp;X LABS</div>
-		<div class="tagline" class:visible={taglineVisible}>ENGINEERING INTEL TSCAVE</div>
+		<div class="tagline" class:visible={taglineVisible}>INTELLIGENCE IN MOTION</div>
 		
 		<button 
 			class="cta" 

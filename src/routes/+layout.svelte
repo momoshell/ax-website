@@ -82,7 +82,7 @@
 			<!-- Footer -->
 			<footer class="footer">
 				<span>© 2026 A&X LABS</span>
-				<span>ENGINEERING INTEL</span>
+				<span>INTELLIGENCE IN MOTION</span>
 			</footer>
 		</div>
 	</TechnicalLayout>
