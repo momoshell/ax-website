@@ -70,7 +70,7 @@
 	];
 </script>
 
-<Section id="services" class="bg-surface pt-16 md:pt-20 py-24">
+<Section id="services" class="bg-bg-section pt-16 md:pt-20 py-24">
 	<div class="max-w-6xl mx-auto px-6">
 		{#if isLoading}
 			<!-- Loading skeleton -->
