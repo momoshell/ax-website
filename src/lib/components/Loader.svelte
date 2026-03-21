@@ -47,23 +47,21 @@
 	});
 </script>
 
-{#if !isDone}
-	<div class="loader" class:done={isDone}>
-		<div class="loader-card">
-			<div class="lc-tick-l"></div>
-			<div class="lc-tick-r"></div>
-			<div class="loader-header">
-				SYSTEM <span style="margin-left:6px;letter-spacing:0.08em;color:rgba(255,255,255,0.08)">//////////////////////</span>
-			</div>
-			<div class="loader-percent">{String(Math.floor(progress)).padStart(3, '0')}</div>
-			<div class="loader-bar-track">
-				<div class="loader-bar-fill" style="width: {progress}%"></div>
-			</div>
-			<div class="loader-label">{currentLabel}</div>
-			<div class="loader-slashes">////////////////////////////////////</div>
+<div class="loader" class:done={isDone}>
+	<div class="loader-card">
+		<div class="lc-tick-l"></div>
+		<div class="lc-tick-r"></div>
+		<div class="loader-header">
+			SYSTEM <span style="margin-left:6px;letter-spacing:0.08em;color:rgba(255,255,255,0.08)">//////////////////////</span>
 		</div>
+		<div class="loader-percent">{String(Math.floor(progress)).padStart(3, '0')}</div>
+		<div class="loader-bar-track">
+			<div class="loader-bar-fill" style="width: {progress}%"></div>
+		</div>
+		<div class="loader-label">{currentLabel}</div>
+		<div class="loader-slashes">////////////////////////////////////</div>
 	</div>
-{/if}
+</div>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');

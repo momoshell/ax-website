@@ -45,11 +45,11 @@
 	});
 
 	function handlePreloaderComplete(): void {
-		isLoading = false;
-		// Small delay for fade transition
+		// Wait for the loader fade-out transition (700ms) plus buffer before unmounting
 		setTimeout(() => {
+			isLoading = false;
 			showContent = true;
-		}, 100);
+		}, 800);
 	}
 </script>
 
