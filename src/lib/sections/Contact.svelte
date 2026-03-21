@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Section from '$lib/components/Section.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
-	import SlashHeading from '$lib/components/SlashHeading.svelte';
 	import { loadContent } from '$lib/content';
 	import type { ContactContent } from '$lib/types';
 
@@ -23,109 +20,126 @@
 	});
 </script>
 
-<Section id="contact" class="bg-surface/30 py-24">
-	<div class="max-w-6xl mx-auto px-6">
-		{#if isLoading}
-			<!-- Loading skeleton -->
-			<div class="split-layout mb-16">
-				<div>
-					<div class="section-label mb-4 w-24 h-3 bg-surface animate-pulse"></div>
-					<div class="section-heading w-48 h-12 bg-surface animate-pulse"></div>
-				</div>
-			</div>
-			<div class="split-layout">
-				<div class="space-y-6">
-					<div class="h-16 bg-surface"></div>
-					<div class="h-16 bg-surface"></div>
-				</div>
-				<div class="space-y-6">
-					<div class="h-6 bg-surface w-24"></div>
-					<div class="h-12 bg-surface"></div>
-					<div class="h-12 bg-surface"></div>
-					<div class="h-12 bg-surface"></div>
-				</div>
-			</div>
-		{:else if error}
-			<p class="body-text font-mono text-center">UNABLE TO LOAD CONTACT DATA</p>
-		{:else if content}
-			<ScrollReveal>
-				<!-- Split layout header -->
-				<div class="split-layout mb-16">
-					<div>
-						<p class="section-label mb-4">Contact</p>
-						<h2 class="section-heading">
-							GET IN TOUCH
-						</h2>
-					</div>
-				</div>
-				
-				<!-- Two-column layout with split style -->
-				<div class="split-layout">
-					<!-- Left column - Email -->
-					<div>
-						<p class="section-label mb-6">EMAIL</p>
-						<a 
-							href="mailto:{content.email}"
-							class="group block mb-8"
-						>
-							<span class="text-white font-mono text-lg group-hover:text-accent transition-colors">
-								{content.email}
-							</span>
-						</a>
-					</div>
-					
-					<!-- Right column - Contact links -->
-					<div>
-						<p class="section-label mb-6">CONTACTS</p>
-						
-						<div class="space-y-8">
-							<!-- LinkedIn -->
-							<a 
-								href={content.linkedin}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="group block horizontal-divider pb-6"
-							>
-								<p class="section-label mb-2">LINKEDIN</p>
-								<p class="text-white font-mono group-hover:text-accent transition-colors">
-									@axlabs ↗
-								</p>
-							</a>
-							
-							<!-- GitHub -->
-							<a 
-								href={content.github}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="group block horizontal-divider pb-6"
-							>
-								<p class="section-label mb-2">GITHUB</p>
-								<p class="text-white font-mono group-hover:text-accent transition-colors">
-									@axlabs ↗
-								</p>
-							</a>
-							
-							<!-- Location -->
-							<div class="horizontal-divider pb-6">
-								<p class="section-label mb-2">LOCATION</p>
-								<p class="text-white font-mono">{content.location}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Body text -->
-				{#if content.body}
-					<div class="split-layout mt-16">
-						<div></div>
-						<div>
-							<p class="body-text text-lg leading-relaxed max-w-2xl">
-								{content.body}
-							</p>
-						</div>
-					</div>
-				{/if}
-			</ScrollReveal>
-		{/if}
+<section class="section" id="contact">
+	<div>
+		<div class="section-eyebrow sr">CONTACT</div>
+		<div class="section-title sr" style="transition-delay: 0.1s">GET IN<br>TOUCH</div>
 	</div>
-</Section>
+
+	<div class="contact-grid">
+		<div>
+			<div class="contact-block sr" style="transition-delay: 0.2s">
+				<div class="contact-label">EMAIL</div>
+				<div class="contact-value">
+					<a href="mailto:{content?.email || 'hello@axlabs.ai'}">{content?.email || 'hello@axlabs.ai'}</a>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="contact-block sr" style="transition-delay: 0.25s">
+				<div class="contact-label">CONTACTS</div>
+				<div class="sr-line" style="transition-delay: 0.3s"></div>
+			</div>
+
+			<div class="contact-block sr" style="transition-delay: 0.3s">
+				<div class="contact-label">LINKEDIN</div>
+				<div class="contact-value">
+					<a href={content?.linkedin || '#'} target="_blank" rel="noopener noreferrer">
+						@axlabs <span class="external-icon">↗</span>
+					</a>
+				</div>
+			</div>
+
+			<div class="contact-block sr" style="transition-delay: 0.35s">
+				<div class="contact-label">GITHUB</div>
+				<div class="contact-value">
+					<a href={content?.github || '#'} target="_blank" rel="noopener noreferrer">
+						@axlabs <span class="external-icon">↗</span>
+					</a>
+				</div>
+			</div>
+
+			<div class="contact-block sr" style="transition-delay: 0.4s">
+				<div class="contact-label">LOCATION</div>
+				<div class="contact-value">{content?.location || 'Global · Remote-First'}</div>
+			</div>
+
+			<div class="contact-cta sr" style="transition-delay: 0.45s">
+				{content?.body || 'Ready to explore how AI can transform your hardware products or operations? We\'d love to hear from you. Reach out and let\'s discuss your challenges, ideas, and goals.'}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.section {
+		padding: var(--spacing-section) var(--pad);
+		max-width: 1400px;
+		margin: 0 auto;
+	}
+
+	.contact-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.3fr;
+		gap: clamp(40px, 8vw, 120px);
+		align-items: start;
+		margin-top: 50px;
+	}
+
+	.contact-label {
+		font-family: var(--font-mono);
+		font-size: 0.5rem;
+		letter-spacing: 0.45em;
+		color: var(--dim);
+		text-transform: uppercase;
+		margin-bottom: 6px;
+	}
+
+	.contact-value {
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
+		letter-spacing: 0.05em;
+		color: var(--white);
+		font-weight: 500;
+	}
+
+	.contact-value a {
+		color: var(--white);
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+
+	.contact-value a:hover {
+		color: var(--mid);
+	}
+
+	.external-icon {
+		font-size: 0.8em;
+	}
+
+	.contact-block {
+		margin-bottom: 48px;
+	}
+
+	.contact-block .sr-line {
+		margin-bottom: 16px;
+	}
+
+	.contact-cta {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.8;
+		color: var(--body-text);
+		margin-top: 40px;
+	}
+
+	@media (max-width: 768px) {
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.section {
+			padding: var(--spacing-section) 20px;
+		}
+	}
+</style>

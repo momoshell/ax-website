@@ -4,17 +4,17 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				background: '#111111',
-				surface: '#0D0D0E',
-				'text-primary': '#E5E5E2',
-				'text-secondary': '#A0A0A0',
-				'text-body': '#888888',
-				'slash': '#666666'
+				'bg': '#050508',
+				'bg-section': '#0a0a0f',
+				'white': '#e8e6e3',
+				'dim': '#55555e',
+				'mid': '#8a8a94',
+				'body-text': '#9a9aa4',
 			},
 			fontFamily: {
-				display: ['Space Grotesk', 'sans-serif'],
+				display: ['Outfit', 'sans-serif'],
 				mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
-				sans: ['IBM Plex Mono', 'Consolas', 'monospace']
+				sans: ['Outfit', 'sans-serif']
 			},
 			fontSize: {
 				hero: ['72px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],

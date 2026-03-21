@@ -1,3 +1,33 @@
+/**
+ * Creates an IntersectionObserver for scroll-based reveal animations.
+ * Adds 'visible' class to elements when they enter the viewport.
+ */
+export function createScrollObserver(options?: IntersectionObserverInit): IntersectionObserver {
+	return new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('visible');
+				}
+			});
+		},
+		{
+			threshold: 0.15,
+			rootMargin: '0px 0px -60px 0px',
+			...options
+		}
+	);
+}
+
+/**
+ * Checks if the user prefers reduced motion.
+ * Returns true if prefers-reduced-motion: reduce is set.
+ */
+export function prefersReducedMotion(): boolean {
+	if (typeof window === 'undefined') return false;
+	return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function scrollToSection(sectionId: string) {
 	const element = document.getElementById(sectionId);
 	if (element) {

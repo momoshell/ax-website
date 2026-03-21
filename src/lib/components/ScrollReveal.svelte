@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { createScrollObserver, prefersReducedMotion } from '$lib/utils/scroll';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -11,40 +12,27 @@
 	let { children, class: className = '', delay = 0 }: Props = $props();
 
 	let element: HTMLDivElement;
-	let isVisible = $state(false);
 
 	onMount(() => {
-		// Check for reduced motion preference
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		
-		if (prefersReducedMotion) {
-			isVisible = true;
+		// Skip animation for reduced motion preference
+		if (prefersReducedMotion()) {
+			if (element) element.classList.add('visible');
 			return;
 		}
 
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					isVisible = true;
-					observer.disconnect();
-				}
-			},
-			{ threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-		);
+		const scrollObserver = createScrollObserver({ threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-		if (element) observer.observe(element);
+		if (element) scrollObserver.observe(element);
 
-		return () => observer.disconnect();
+		return () => {
+			scrollObserver.disconnect();
+		};
 	});
 </script>
 
 <div
 	bind:this={element}
-	class="transition-all duration-700 ease-out {className}"
-	class:opacity-0={!isVisible}
-	class:opacity-100={isVisible}
-	class:translate-y-6={!isVisible}
-	class:translate-y-0={isVisible}
+	class="sr {className}"
 	style="transition-delay: {delay}ms"
 >
 	{@render children()}

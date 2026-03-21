@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import Preloader from '$lib/components/Preloader.svelte';
+	import Loader from '$lib/components/Loader.svelte';
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import StructuredData from '$lib/components/StructuredData.svelte';
 	import Header from '$lib/components/Header.svelte';
@@ -58,7 +58,7 @@
 
 <!-- Preloader overlay -->
 {#if isLoading}
-	<Preloader onComplete={handlePreloaderComplete} />
+	<Loader onComplete={handlePreloaderComplete} />
 {/if}
 
 <!-- Main content with fade-in -->
@@ -78,6 +78,12 @@
 			<main class="relative pt-16 md:pt-20">
 				{@render children()}
 			</main>
+
+			<!-- Footer -->
+			<footer class="footer">
+				<span>© 2026 A&X LABS</span>
+				<span>ENGINEERING INTEL</span>
+			</footer>
 		</div>
 	</TechnicalLayout>
 {:else}

@@ -5,17 +5,9 @@
 	import Contact from '$lib/sections/Contact.svelte';
 </script>
 
-<!-- Main content container with id for skip link -->
 <main id="main-content">
-	<!-- Hero Section -->
 	<Hero />
-
-	<!-- Services Section -->
 	<Services />
-
-	<!-- About Section -->
 	<About />
-
-	<!-- Contact Section -->
 	<Contact />
 </main>

@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Section from '$lib/components/Section.svelte';
-	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
+	import SpecCard from '$lib/components/SpecCard.svelte';
 	import { loadContent } from '$lib/content';
-	import type { ServicesContent, Service } from '$lib/types';
+	import type { ServicesContent } from '$lib/types';
 
 	let content = $state<ServicesContent | null>(null);
 	let isLoading = $state(true);
 	let error = $state<string | null>(null);
+	let rulerVisible = $state(false);
 
 	onMount(() => {
 		loadContent('services')
@@ -19,19 +20,54 @@
 				error = err instanceof Error ? err.message : 'Failed to load services content';
 				isLoading = false;
 			});
+
+		// Ruler visibility observer
+		let observer: IntersectionObserver | null = null;
+		const ruler = document.querySelector('.ruler-bar');
+		if (ruler) {
+			observer = new IntersectionObserver(
+				([entry]) => {
+					if (entry.isIntersecting) {
+						rulerVisible = true;
+					}
+				},
+				{ threshold: 0.5 }
+			);
+			observer.observe(ruler);
+		}
+
+		return () => {
+			if (observer) observer.disconnect();
+		};
 	});
 
-	// Icon components as simple SVG paths
-	const iconPaths: Record<string, string> = {
-		brain: 'M12 2a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83L12 12l-2.83-3.17A4 4 0 0 1 8 6a4 4 0 0 1 4-4zm0 10c3.31 0 6 2.69 6 6v1H6v-1c0-3.31 2.69-6 6-6zm-4 4c0-2.21 1.79-4 4-4s4 1.79 4 4H8z',
-		cpu: 'M9 3v2H7a2 2 0 0 0-2 2v2h2V7h2V5H9V3zm6 0v2h2a2 2 0 0 1 2 2v2h-2V9h-2v2h2v2h-2v-2h-2V9h2V7h2V5h-2zm-6 6v8h2v2H7a2 2 0 0 1-2-2v-2h2v2h2v-2H9v-2h2v-2H9zm6 0v2h2v2h2v2h-2v2h-2v-2h-2v-2h2v-2h2zM9 13v2h6v-2H9z',
-		layers: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
-		compass: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0 0a14.002 14.002 0 0 1-8.123-2.683M12 2a14.002 14.002 0 0 1 8.123 2.683'
-	};
-
-	function getIconPath(icon: string): string {
-		return iconPaths[icon] || iconPaths.brain;
-	}
+	// Service data with spec card info
+	const services = [
+		{
+			number: '01',
+			codename: 'AXL-AI-DEV',
+			diagramShape: 'neural' as const,
+			meta: { type: 'ML / CV / NLP', status: 'ACTIVE', ref: '0xA1' }
+		},
+		{
+			number: '02',
+			codename: 'AXL-HW-INT',
+			diagramShape: 'circuit' as const,
+			meta: { type: 'IOT / EMBEDDED', status: 'ACTIVE', ref: '0xB2' }
+		},
+		{
+			number: '03',
+			codename: 'AXL-SYS-ARC',
+			diagramShape: 'arch' as const,
+			meta: { type: 'INFRA / CLOUD', status: 'ACTIVE', ref: '0xC3' }
+		},
+		{
+			number: '04',
+			codename: 'AXL-CONSULT',
+			diagramShape: 'radar' as const,
+			meta: { type: 'STRATEGY', status: 'ACTIVE', ref: '0xD4' }
+		}
+	];
 </script>
 
 <Section id="services" class="bg-surface/30 py-24">
@@ -57,38 +93,125 @@
 			<p class="body-text text-center">Unable to load services</p>
 		{:else if content}
 			<!-- Split layout header -->
-			<div class="split-layout mb-16">
+			<div class="split-layout mb-12">
 				<div>
 					<p class="section-label mb-4">Services</p>
-					<h2 class="section-heading">
-						{content.title}
-					</h2>
+					<h2 class="section-heading">{content.title}</h2>
 				</div>
-				<p class="body-text text-lg self-end">
-					{content.subtitle}
-				</p>
+				<p class="body-text text-lg self-end">{content.subtitle}</p>
 			</div>
-			
-			<!-- Services list with horizontal dividers -->
-			<div class="space-y-0">
+
+			<!-- Ruler bar with tick marks -->
+			<div class="ruler-bar mb-10 h-5 relative" class:visible={rulerVisible}>
+				<div class="absolute inset-x-0 bottom-0 h-px bg-line-faint"></div>
+				<!-- Tick marks -->
+				<div class="absolute inset-x-0 bottom-0 flex justify-between px-0">
+					{#each Array(21) as _, i (i)}
+						<div
+							class="w-px h-2 bg-line-faint"
+							style="height: {i % 5 === 0 ? '8px' : '4px'}; opacity: {i % 5 === 0 ? '0.6' : '0.3'};"
+						></div>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Spec cards grid -->
+			<div class="spec-grid">
 				{#each content.services as service, index (service.title)}
-					<ScrollReveal delay={index * 100}>
-						<div class="service-card group">
-							<div class="split-layout">
-								<!-- Service title -->
-								<h3 class="service-title group-hover:text-accent transition-colors duration-300">
-									{service.title}
-								</h3>
-								
-								<!-- Service description -->
-								<p class="service-description">
-									{service.description}
-								</p>
-							</div>
-						</div>
-					</ScrollReveal>
+					<div
+						class="spec-card-wrapper opacity-0 translate-y-5 transition-all duration-700 ease-out"
+						style="transition-delay: {300 + index * 100}ms"
+						class:opacity-100={rulerVisible}
+						class:translate-y-0={rulerVisible}
+					>
+						<SpecCard
+							number={services[index].number}
+							codename={services[index].codename}
+							title={service.title}
+							description={service.description}
+							diagramShape={services[index].diagramShape}
+							meta={services[index].meta}
+						/>
+					</div>
 				{/each}
 			</div>
 		{/if}
 	</div>
 </Section>
+
+<style>
+	/* Split layout for header */
+	:global(.split-layout) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 40px;
+		align-items: end;
+	}
+
+	@media (max-width: 768px) {
+		:global(.split-layout) {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+	}
+
+	/* Spec grid layout */
+	.spec-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 24px;
+		margin-top: 10px;
+	}
+
+	@media (max-width: 768px) {
+		.spec-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	/* Ruler bar transition */
+	.ruler-bar {
+		opacity: 0;
+		transition: opacity 1s ease;
+	}
+
+	.ruler-bar.visible {
+		opacity: 1;
+	}
+
+	/* Section label style */
+	.section-label {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.7rem;
+		letter-spacing: 0.4em;
+		color: var(--color-accent, #a78bfa);
+		text-transform: uppercase;
+	}
+
+	/* Section heading style */
+	.section-heading {
+		font-family: 'Outfit', sans-serif;
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		font-weight: 700;
+		color: var(--color-white, #ffffff);
+		line-height: 1.2;
+	}
+
+	/* Body text style */
+	:global(.body-text) {
+		font-family: 'IBM Plex Mono', monospace;
+		font-size: 0.85rem;
+		line-height: 1.75;
+		color: var(--color-body-text, #9ca3af);
+	}
+
+	/* Surface color for skeleton */
+	:global(.bg-surface) {
+		background-color: rgba(255, 255, 255, 0.05);
+	}
+
+	/* Line faint color */
+	.bg-line-faint {
+		background-color: rgba(255, 255, 255, 0.06);
+	}
+</style>
