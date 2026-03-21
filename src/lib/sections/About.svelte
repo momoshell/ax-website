@@ -557,6 +557,16 @@
 		display: block;
 	}
 
+	.about-data-starburst canvas {
+		width: 40px;
+		height: 40px;
+	}
+
+	#aboutBarBarcode {
+		width: 130px;
+		height: 28px;
+	}
+
 	.barcode-label {
 		font-size: 0.42rem;
 		letter-spacing: 0.25em;
