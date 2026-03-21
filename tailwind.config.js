@@ -10,6 +10,7 @@ export default {
 				'dim': '#55555e',
 				'mid': '#8a8a94',
 				'body-text': '#9a9aa4',
+				'surface': 'rgba(10, 10, 15, 0.3)',
 			},
 			fontFamily: {
 				display: ['Outfit', 'sans-serif'],
