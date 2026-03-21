@@ -156,12 +156,12 @@ body {
 		padding-bottom: 40px;
 	}
 	
-	/* Service title - IBM Plex Mono, uppercase, medium gray */
+	/* Service title - IBM Plex Mono, uppercase, technical data label */
 	.service-title {
 		font-family: var(--font-mono);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.1em;
 		font-size: 1.2rem;
 		margin-bottom: 10px;
 		color: #A0A0A0;
@@ -175,12 +175,12 @@ body {
 		font-size: 0.9rem;
 	}
 	
-	/* Section headings - Space Grotesk, uppercase, off-white */
+	/* Section headings - Space Grotesk, uppercase, brutalist tight spacing */
 	.section-heading {
 		font-family: var(--font-display);
 		font-weight: 700;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: -0.02em;
 		line-height: 1;
 		color: #E5E5E2;
 		font-size: clamp(2rem, 5vw, 3.5rem);

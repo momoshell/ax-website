@@ -30,8 +30,8 @@ export async function loadContent(section: string): Promise<
 	| (ContactContent & { body: string })
 > {
 	// Get the metadata from mdsvex-processed modules (frontmatter is parsed by mdsvex)
-	const modules = import.meta.glob<MarkdownModule>('$lib/content/*.md', { eager: true });
-	const path = `/src/lib/content/${section}.md`;
+	const modules = import.meta.glob<MarkdownModule>('/content/*.md', { eager: true });
+	const path = `/content/${section}.md`;
 
 	if (!modules[path]) {
 		throw new Error(`Content not found: ${section}`);
@@ -41,13 +41,13 @@ export async function loadContent(section: string): Promise<
 	const metadata = module.metadata;
 
 	// Get the raw markdown content for the body
-	const rawModules = import.meta.glob<RawMarkdownModule>('$lib/content/*.md', {
+	const rawModules = import.meta.glob<RawMarkdownModule>('/content/*.md', {
 		eager: true,
 		query: '?raw',
 		import: 'default'
 	});
 
-	const rawPath = `/src/lib/content/${section}.md?raw`;
+	const rawPath = `/content/${section}.md?raw`;
 	const rawContent = rawModules[rawPath] || rawModules[path];
 
 	let body = '';
@@ -69,8 +69,8 @@ export async function loadContentWithBody(section: string): Promise<{
 	metadata: Record<string, unknown>;
 	component: unknown;
 }> {
-	const modules = import.meta.glob<MarkdownModule>('$lib/content/*.md', { eager: true });
-	const path = `/src/lib/content/${section}.md`;
+	const modules = import.meta.glob<MarkdownModule>('/content/*.md', { eager: true });
+	const path = `/content/${section}.md`;
 
 	if (!modules[path]) {
 		throw new Error(`Content not found: ${section}`);
