@@ -3,7 +3,6 @@
 	import { browser } from '$app/environment';
 	import ParticleCanvas from '$lib/components/ParticleCanvas.svelte';
 	import BinaryRain from '$lib/components/BinaryRain.svelte';
-	import HUDCard from '$lib/components/HUDCard.svelte';
 	import HUDGrid from '$lib/components/HUDGrid.svelte';
 
 	let revealProgress = $state(0);
@@ -16,7 +15,6 @@
 	let ctaVisible = $state(false);
 	let cornerMarksVisible = $state(false);
 	let crosshairVisible = $state(false);
-	let hudCardsVisible = $state(false);
 
 	let currentTime = $state('00:00:00');
 
@@ -89,10 +87,6 @@
 			ctaVisible = true;
 		}, 2900);
 
-		setTimeout(() => {
-			hudCardsVisible = true;
-		}, 3000);
-
 		return () => {
 			clearInterval(clockInterval);
 		};
@@ -125,12 +119,8 @@
 	<!-- Center crosshair -->
 	<div class="crosshair" class:visible={crosshairVisible}></div>
 
-	<!-- HUD Cards -->
-	<HUDCard position="tl" label="STATUS" value="ONLINE" slashes="////////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="tr" label="TIME" value={currentTime} slashes="////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="bl" label="NODE" value="0xAF91.ACTIVE" slashes="////////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="br" label="VERSION" value="V2.4.1" slashes="////////////////////" visible={hudCardsVisible} />
-	<HUDGrid visible={hudCardsVisible} />
+	<!-- HUD Grid -->
+	<HUDGrid />
 
 	<!-- Main content (z-index: 10) -->
 	<div class="content" class:visible={showContent}>
