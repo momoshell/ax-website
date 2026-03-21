@@ -70,7 +70,7 @@
 	];
 </script>
 
-<Section id="services" class="bg-bg-section pt-16 md:pt-20 py-24">
+<Section id="services" class="pt-16 md:pt-20 py-24">
 	<div class="max-w-6xl mx-auto px-6">
 		{#if isLoading}
 			<!-- Loading skeleton -->
@@ -184,7 +184,7 @@
 		font-family: 'IBM Plex Mono', monospace;
 		font-size: 0.7rem;
 		letter-spacing: 0.4em;
-		color: var(--color-accent, #a78bfa);
+		color: var(--dim, #55555e);
 		text-transform: uppercase;
 	}
 
