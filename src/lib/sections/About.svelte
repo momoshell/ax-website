@@ -64,33 +64,32 @@
 			if (bc) {
 				const ctx = bc.getContext('2d');
 				if (ctx) {
-					const W = 130, H = 28, n = 35;
 					const localCtx = ctx;
-					const bars = Array.from({ length: n }, () => ({
-						w: Math.random() > 0.5 ? Math.random() * 3 + 1.5 : Math.random() * 1.5 + 0.5,
+					bc.width = 130;
+					bc.height = 28;
+					const W = 130, H = 28;
+					const bars = Array.from({ length: 30 }, (_, i) => ({
+						x: i * 4 + (i % 2),
+						w: i % 3 === 0 ? 2 : 1,
 						phase: Math.random() * Math.PI * 2,
-						speed: 0.4 + Math.random() * 0.8,
-						x: 0
+						speed: 0.5 + Math.random() * 0.5
 					}));
-					let xPos = 0;
-					bars.forEach(b => { b.x = xPos; xPos += b.w + 1.2; });
-					const scale = W / xPos;
-					let animId: number;
+					
 					function drawBC() {
-						localCtx.clearRect(0, 0, W, H);
+						// Clear with background
+						localCtx.fillStyle = 'rgba(10, 10, 15, 1)';
+						localCtx.fillRect(0, 0, W, H);
+						// Draw bars
 						const t = performance.now() * 0.001;
 						bars.forEach(b => {
 							const wave = Math.sin(t * b.speed + b.phase);
-							const w = Math.max(0.4, b.w + wave * 1.5) * scale;
-							const x = b.x * scale;
-							const alpha = 0.25 + (wave * 0.5 + 0.5) * 0.3;
-							localCtx.fillStyle = `rgba(232,230,227,${alpha})`;
-							localCtx.fillRect(x, 0, w, H);
+							const alpha = 0.4 + wave * 0.3;
+							localCtx.fillStyle = `rgba(232, 230, 227, ${alpha})`;
+							localCtx.fillRect(b.x, 0, b.w, H);
 						});
-						animId = requestAnimationFrame(drawBC);
+						requestAnimationFrame(drawBC);
 					}
 					drawBC();
-					return () => cancelAnimationFrame(animId);
 				}
 			}
 		}, 100);
