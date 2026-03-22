@@ -26,8 +26,8 @@
 	function draw() {
 		if (!ctx || !canvas) return;
 
-		// Trail effect - semi-transparent overlay
-		ctx.fillStyle = 'rgba(5, 5, 8, 0.09)';
+		// Trail effect - semi-transparent overlay (more subtle)
+		ctx.fillStyle = 'rgba(5, 5, 8, 0.06)';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		// Set font
@@ -36,7 +36,7 @@
 		for (let i = 0; i < cols; i++) {
 			// Random character
 			const char = Math.random() > 0.5 ? '1' : '0';
-			const alpha = 0.35 + Math.random() * 0.5;
+			const alpha = 0.15 + Math.random() * 0.25;
 
 			ctx.fillStyle = `rgba(200, 210, 230, ${alpha})`;
 			ctx.fillText(char, i * columnWidth, drops[i] * 15);
@@ -99,6 +99,6 @@
 	}
 
 	.binary-rain.visible {
-		opacity: 0.35;
+		opacity: 0.15;
 	}
 </style>
