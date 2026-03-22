@@ -81,9 +81,9 @@
 						const t = performance.now() * 0.001;
 						bars.forEach(b => {
 							const wave = Math.sin(t * b.speed + b.phase);
-							const w = Math.max(0.5, b.w + wave * 0.6) * scale;
+							const w = Math.max(0.4, b.w + wave * 1.5) * scale;
 							const x = b.x * scale;
-							const alpha = 0.2 + (wave * 0.5 + 0.5) * 0.15;
+							const alpha = 0.25 + (wave * 0.5 + 0.5) * 0.3;
 							localCtx.fillStyle = `rgba(232,230,227,${alpha})`;
 							localCtx.fillRect(x, 0, w, H);
 						});

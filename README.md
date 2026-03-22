@@ -62,8 +62,3 @@ Edit markdown files in `/content/` directory to update website content without t
 ## Deployment
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
-
-## Design Credits
-
-- Inspired by [Spektral Studio](https://www.spektralstudio.com/)
-- Supplemental elements from [IP Axis Industrial Studio](https://www.behance.net/gallery/192747091/IP-AXIS-INDUSTRIAL-STUDIO)
