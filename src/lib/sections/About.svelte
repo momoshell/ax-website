@@ -547,22 +547,28 @@
 	.about-data-starburst {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		gap: 12px;
 		padding: 8px 14px;
 		border-right: 1px solid rgba(255, 255, 255, 0.04);
 	}
 
-	#aboutBarStarburst,
-	#aboutBarBarcode {
-		display: block;
+	.about-data-starburst > div {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
 	}
 
-	.about-data-starburst canvas {
+	#aboutBarStarburst {
+		display: block;
 		width: 40px;
 		height: 40px;
+		flex-shrink: 0;
 	}
 
 	#aboutBarBarcode {
+		display: block;
 		width: 130px;
 		height: 28px;
 	}
