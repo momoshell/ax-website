@@ -570,6 +570,8 @@
 		display: block;
 		width: 130px;
 		height: 28px;
+		border: 1px solid red;
+		background: #ff0000;
 	}
 
 	.barcode-label {
