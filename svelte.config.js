@@ -20,7 +20,7 @@ const config = {
 			strict: true
 		}),
 		paths: {
-			base: ''
+			base: '/ax-website'
 		},
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {
