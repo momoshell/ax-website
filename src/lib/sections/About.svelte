@@ -568,10 +568,9 @@
 
 	#aboutBarBarcode {
 		display: block;
-		width: 130px;
-		height: 28px;
-		border: 1px solid red;
-		background: #ff0000;
+		width: 130px !important;
+		height: 28px !important;
+		flex-shrink: 0;
 	}
 
 	.barcode-label {
