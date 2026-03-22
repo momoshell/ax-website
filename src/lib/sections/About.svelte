@@ -3,6 +3,7 @@
 	import Section from '$lib/components/Section.svelte';
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import AboutVisual from '$lib/components/AboutVisual.svelte';
+	import AboutBarcode from '$lib/components/AboutBarcode.svelte';
 	import { loadContent } from '$lib/content';
 	import type { AboutContent } from '$lib/types';
 
@@ -56,40 +57,6 @@
 					}
 					drawStar();
 					return () => cancelAnimationFrame(animId);
-				}
-			}
-
-			// Barcode
-			const bc = document.getElementById('aboutBarBarcode') as HTMLCanvasElement | null;
-			if (bc) {
-				const ctx = bc.getContext('2d');
-				if (ctx) {
-					const localCtx = ctx;
-					bc.width = 130;
-					bc.height = 28;
-					const W = 130, H = 28;
-					const bars = Array.from({ length: 30 }, (_, i) => ({
-						x: i * 4 + (i % 2),
-						w: i % 3 === 0 ? 2 : 1,
-						phase: Math.random() * Math.PI * 2,
-						speed: 0.5 + Math.random() * 0.5
-					}));
-					
-					function drawBC() {
-						// Clear with background
-						localCtx.fillStyle = 'rgba(10, 10, 15, 1)';
-						localCtx.fillRect(0, 0, W, H);
-						// Draw bars
-						const t = performance.now() * 0.001;
-						bars.forEach(b => {
-							const wave = Math.sin(t * b.speed + b.phase);
-							const alpha = 0.4 + wave * 0.3;
-							localCtx.fillStyle = `rgba(232, 230, 227, ${alpha})`;
-							localCtx.fillRect(b.x, 0, b.w, H);
-						});
-						requestAnimationFrame(drawBC);
-					}
-					drawBC();
 				}
 			}
 		}, 100);
@@ -188,11 +155,11 @@
 					<div class="reg-dot rd-dr"></div>
 					<ScrollReveal>
 						<div class="about-data-starburst">
-							<canvas id="aboutBarStarburst" width="80" height="80"></canvas>
-							<div>
-								<canvas id="aboutBarBarcode" width="130" height="28"></canvas>
-								<div class="barcode-label">A&X LABS</div>
+							<div class="starburst-barcode-wrap">
+								<canvas id="aboutBarStarburst" width="80" height="80"></canvas>
+								<AboutBarcode />
 							</div>
+							<div class="barcode-label">A&X LABS</div>
 						</div>
 					</ScrollReveal>
 					<ScrollReveal>
@@ -205,7 +172,7 @@
 								<div class="about-data-label">
 									DESIGNER <span class="sl">//////////</span>
 								</div>
-								<div class="about-data-value">INTEL TSCAVE</div>
+								<div class="about-data-value">C'TAN</div>
 							</div>
 						</div>
 					</ScrollReveal>
@@ -545,31 +512,24 @@
 
 	.about-data-starburst {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 12px;
+		gap: 4px;
 		padding: 8px 14px;
 		border-right: 1px solid rgba(255, 255, 255, 0.04);
 	}
 
-	.about-data-starburst > div {
+	.starburst-barcode-wrap {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
+		align-items: center;
+		gap: 12px;
 	}
 
 	#aboutBarStarburst {
 		display: block;
 		width: 40px;
 		height: 40px;
-		flex-shrink: 0;
-	}
-
-	#aboutBarBarcode {
-		display: block;
-		width: 130px !important;
-		height: 28px !important;
 		flex-shrink: 0;
 	}
 

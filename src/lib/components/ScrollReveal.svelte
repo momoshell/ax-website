@@ -33,7 +33,7 @@
 <div
 	bind:this={element}
 	class="sr {className}"
-	style="transition-delay: {delay}ms"
+	style="transition-delay: {delay}ms; display: flex; align-items: center;"
 >
 	{@render children()}
 </div>
