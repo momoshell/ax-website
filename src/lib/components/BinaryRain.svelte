@@ -13,7 +13,7 @@
 	let animationFrame: number | null = null;
 	let drops: number[] = [];
 	let cols = $state(0);
-	let columnWidth = 11;
+	let columnWidth = 16;
 
 	function resize() {
 		if (!canvas) return;
@@ -26,8 +26,8 @@
 	function draw() {
 		if (!ctx || !canvas) return;
 
-		// Trail effect - semi-transparent overlay (more subtle)
-		ctx.fillStyle = 'rgba(5, 5, 8, 0.06)';
+		// Trail effect - semi-transparent overlay
+		ctx.fillStyle = 'rgba(5, 5, 8, 0.05)';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		// Set font
@@ -36,18 +36,18 @@
 		for (let i = 0; i < cols; i++) {
 			// Random character
 			const char = Math.random() > 0.5 ? '1' : '0';
-			const alpha = 0.15 + Math.random() * 0.25;
+			const alpha = 0.25 + Math.random() * 0.35;
 
 			ctx.fillStyle = `rgba(200, 210, 230, ${alpha})`;
 			ctx.fillText(char, i * columnWidth, drops[i] * 15);
 
 			// Reset drop when it goes off screen (with low probability)
-			if (drops[i] * 15 > canvas.height && Math.random() > 0.975) {
+			if (drops[i] * 15 > canvas.height && Math.random() > 0.98) {
 				drops[i] = 0;
 			}
 
-			// Increment drop position with random speed (0.3-0.5)
-			drops[i] += 0.3 + Math.random() * 0.2;
+			// Increment drop position with slower random speed (0.15-0.3)
+			drops[i] += 0.15 + Math.random() * 0.15;
 		}
 	}
 
@@ -99,6 +99,6 @@
 	}
 
 	.binary-rain.visible {
-		opacity: 0.15;
+		opacity: 0.25;
 	}
 </style>
