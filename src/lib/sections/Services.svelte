@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import Section from '$lib/components/Section.svelte';
 	import SpecCard from '$lib/components/SpecCard.svelte';
 	import { loadContent } from '$lib/content';
@@ -8,66 +8,65 @@
 	let content = $state<ServicesContent | null>(null);
 	let isLoading = $state(true);
 	let error = $state<string | null>(null);
-	let rulerVisible = $state(true);
+	let rulerVisible = $state(false);
+	let rulerEl = $state<HTMLElement | null>(null);
 
 	onMount(() => {
+		let disposed = false;
+		let observer: IntersectionObserver | null = null;
+		let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
+
 		loadContent('services')
-			.then((data) => {
+			.then(async (data) => {
+				// Guard against unmount before continuation completes
+				if (disposed) return;
+
 				content = data as ServicesContent;
 				isLoading = false;
+
+				// Wait for DOM update after content renders
+				await tick();
+
+				// Guard again after async tick() — component may have unmounted
+				if (disposed) return;
+
+				// Use bind:this reference or safe fallback
+				const ruler = rulerEl ?? document.querySelector('.ruler-bar');
+				if (ruler) {
+					observer = new IntersectionObserver(
+						([entry]) => {
+							if (disposed) return;
+							if (entry.isIntersecting) {
+								rulerVisible = true;
+							}
+						},
+						{ threshold: 0.5 }
+					);
+					observer.observe(ruler);
+				} else {
+					// Safe fallback: make visible after delay if ruler not found
+					fallbackTimer = setTimeout(() => {
+						if (!disposed) {
+							rulerVisible = true;
+						}
+					}, 1000);
+				}
 			})
 			.catch((err) => {
+				if (disposed) return;
 				error = err instanceof Error ? err.message : 'Failed to load services content';
 				isLoading = false;
 			});
 
-		// Ruler visibility observer
-		let observer: IntersectionObserver | null = null;
-		const ruler = document.querySelector('.ruler-bar');
-		if (ruler) {
-			observer = new IntersectionObserver(
-				([entry]) => {
-					if (entry.isIntersecting) {
-						rulerVisible = true;
-					}
-				},
-				{ threshold: 0.5 }
-			);
-			observer.observe(ruler);
-		}
-
 		return () => {
-			if (observer) observer.disconnect();
+			disposed = true;
+			observer?.disconnect();
+			if (fallbackTimer !== null) {
+				clearTimeout(fallbackTimer);
+				fallbackTimer = null;
+			}
 		};
 	});
-
-	// Service data with spec card info
-	const services = [
-		{
-			number: '01',
-			codename: 'AXL-AI-DEV',
-			diagramShape: 'neural' as const,
-			meta: { type: 'ML / CV / NLP', status: 'ACTIVE', ref: '0xA1' }
-		},
-		{
-			number: '02',
-			codename: 'AXL-HW-INT',
-			diagramShape: 'circuit' as const,
-			meta: { type: 'IOT / EMBEDDED', status: 'ACTIVE', ref: '0xB2' }
-		},
-		{
-			number: '03',
-			codename: 'AXL-SYS-ARC',
-			diagramShape: 'arch' as const,
-			meta: { type: 'INFRA / CLOUD', status: 'ACTIVE', ref: '0xC3' }
-		},
-		{
-			number: '04',
-			codename: 'AXL-CONSULT',
-			diagramShape: 'radar' as const,
-			meta: { type: 'STRATEGY', status: 'ACTIVE', ref: '0xD4' }
-		}
-	];
 </script>
 
 <Section id="services" class="pt-16 md:pt-20 py-24">
@@ -102,7 +101,7 @@
 			</div>
 
 			<!-- Ruler bar with tick marks -->
-			<div class="ruler-bar visible mb-10 h-5 relative">
+			<div class="ruler-bar mb-10 h-5 relative" class:visible={rulerVisible} bind:this={rulerEl}>
 				<div class="absolute inset-x-0 bottom-0 h-px bg-line-faint"></div>
 				<!-- Tick marks -->
 				<div class="absolute inset-x-0 bottom-0 flex justify-between px-0">
@@ -125,12 +124,12 @@
 						class:translate-y-0={rulerVisible}
 					>
 						<SpecCard
-							number={services[index].number}
-							codename={services[index].codename}
+							number={service.number}
+							codename={service.codename}
 							title={service.title}
 							description={service.description}
-							diagramShape={services[index].diagramShape}
-							meta={services[index].meta}
+							diagramShape={service.diagramShape}
+							meta={service.meta}
 						/>
 					</div>
 				{/each}
@@ -177,32 +176,6 @@
 
 	.ruler-bar.visible {
 		opacity: 1;
-	}
-
-	/* Section label style */
-	.section-label {
-		font-family: 'IBM Plex Mono', monospace;
-		font-size: 0.7rem;
-		letter-spacing: 0.4em;
-		color: var(--dim, #55555e);
-		text-transform: uppercase;
-	}
-
-	/* Section heading style */
-	.section-heading {
-		font-family: 'Outfit', sans-serif;
-		font-size: clamp(1.75rem, 4vw, 2.5rem);
-		font-weight: 700;
-		color: var(--color-white, #ffffff);
-		line-height: 1.2;
-	}
-
-	/* Body text style */
-	:global(.body-text) {
-		font-family: 'IBM Plex Mono', monospace;
-		font-size: 0.85rem;
-		line-height: 1.75;
-		color: var(--color-body-text, #9ca3af);
 	}
 
 	/* Surface color for skeleton */

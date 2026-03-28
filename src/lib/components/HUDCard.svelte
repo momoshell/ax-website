@@ -1,19 +1,23 @@
 <script lang="ts">
+	import SlashDecor from '$lib/components/ui/SlashDecor.svelte';
+
 	interface Props {
 		position: 'tl' | 'tr' | 'bl' | 'br';
 		label: string;
 		value: string;
-		slashes?: string;
+		slashes?: number;
 		visible?: boolean;
 	}
 
-	let { position, label, value, slashes = '', visible = false }: Props = $props();
+	let { position, label, value, slashes = 0, visible = false }: Props = $props();
 </script>
 
 <div class="hud-card hud-card-{position}" class:visible>
 	<div class="hud-card-header">
 		<span class="label">{label}</span>
-		<span class="slashes">{slashes}</span>
+		{#if slashes > 0}
+			<SlashDecor count={slashes} class="slashes" />
+		{/if}
 	</div>
 	<div class="hud-card-body">
 		<div class="value">{value}</div>
@@ -57,12 +61,7 @@
 		white-space: nowrap;
 	}
 
-	.hud-card-header .slashes {
-		font-size: 0.38rem;
-		color: rgba(255, 255, 255, 0.08);
-		letter-spacing: 0.05em;
-		overflow: hidden;
-		white-space: nowrap;
+	.hud-card-header :global(.slash-decor.slashes) {
 		flex: 1;
 	}
 

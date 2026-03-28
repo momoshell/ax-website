@@ -4,6 +4,7 @@
 	import ScrollReveal from '$lib/components/ScrollReveal.svelte';
 	import AboutVisual from '$lib/components/AboutVisual.svelte';
 	import AboutBarcode from '$lib/components/AboutBarcode.svelte';
+	import SlashDecor from '$lib/components/ui/SlashDecor.svelte';
 	import { loadContent } from '$lib/content';
 	import type { AboutContent } from '$lib/types';
 
@@ -12,6 +13,8 @@
 	let error = $state<string | null>(null);
 
 	onMount(() => {
+		let animId: number | null = null;
+
 		loadContent('about')
 			.then((data) => {
 				content = data as AboutContent;
@@ -22,16 +25,14 @@
 				isLoading = false;
 			});
 
-		// Starburst and barcode animation
+		// Starburst animation
 		setTimeout(() => {
-			// Starburst
 			const sc = document.getElementById('aboutBarStarburst') as HTMLCanvasElement | null;
 			if (sc) {
 				const ctx = sc.getContext('2d');
 				if (ctx) {
 					const S = 80, C = 40;
 					const localCtx = ctx;
-					let animId: number;
 					function drawStar() {
 						localCtx.clearRect(0, 0, S, S);
 						const t = performance.now() * 0.001;
@@ -56,10 +57,13 @@
 						animId = requestAnimationFrame(drawStar);
 					}
 					drawStar();
-					return () => cancelAnimationFrame(animId);
 				}
 			}
 		}, 100);
+
+		return () => {
+			if (animId) cancelAnimationFrame(animId);
+		};
 	});
 </script>
 
@@ -139,7 +143,7 @@
 					<ScrollReveal>
 						<div class="about-founder">
 							<div class="about-founder-label">
-								FOUNDER <span class="sl">////////////////////////////////////////////////</span>
+								FOUNDER <SlashDecor count={50} class="sl" />
 							</div>
 							<div class="about-founder-name">A&X LABS</div>
 						</div>
@@ -165,12 +169,12 @@
 					<ScrollReveal>
 						<div class="about-data-cell">
 							<div class="about-data-label">
-								COMPANY <span class="sl">///////////</span>
+								COMPANY <SlashDecor count={11} class="sl" />
 							</div>
 							<div class="about-data-value">A&X.LABS.ENGINEERING</div>
 							<div class="mt-4">
 								<div class="about-data-label">
-									DESIGNER <span class="sl">//////////</span>
+									DESIGNER <SlashDecor count={10} class="sl" />
 								</div>
 								<div class="about-data-value">C'TAN</div>
 							</div>
@@ -179,7 +183,7 @@
 					<ScrollReveal>
 						<div class="about-data-cell">
 							<div class="about-data-label">
-								DESCRIPTION <span class="sl">//////////////////////////////////////////////////////</span>
+								DESCRIPTION <SlashDecor count={58} class="sl" />
 							</div>
 							<div class="about-data-value about-data-desc">
 								A&X Labs has adopted a progressive concept with the addition of scientific elements since the inception of our practice. Our approach uses future-ready engineering as the major idea.
@@ -189,7 +193,7 @@
 					<ScrollReveal>
 						<div class="about-data-cell">
 							<div class="about-data-label">
-								NOTE <span class="sl">///////////////</span>
+								NOTE <SlashDecor count={15} class="sl" />
 							</div>
 							<div class="about-data-value about-data-note">
 								CONTENTS OF THIS WEBSITE ARE THE PROPERTY OF A&X LABS. ALL RIGHTS RESERVED. © 2026.
@@ -360,8 +364,8 @@
 	}
 
 	.about-slash-title {
-		font-family: 'Outfit', sans-serif;
-		font-weight: 900;
+		font-family: var(--font-display);
+		font-weight: 700;
 		font-size: clamp(2.8rem, 5vw, 4.5rem);
 		letter-spacing: 0.02em;
 		line-height: 1;
@@ -426,15 +430,13 @@
 		gap: 8px;
 	}
 
-	.about-founder-label .sl {
-		color: rgba(255, 255, 255, 0.07);
-		letter-spacing: 0.05em;
+	.about-founder-label :global(.slash-decor.sl) {
 		font-size: 0.35rem;
 	}
 
 	.about-founder-name {
-		font-family: 'Outfit', sans-serif;
-		font-weight: 800;
+		font-family: var(--font-display);
+		font-weight: 700;
 		font-size: 1.2rem;
 		letter-spacing: 0.12em;
 		color: var(--white);
@@ -497,9 +499,7 @@
 		text-transform: uppercase;
 	}
 
-	.about-data-label .sl {
-		color: rgba(255, 255, 255, 0.06);
-		letter-spacing: 0.05em;
+	.about-data-label :global(.slash-decor.sl) {
 		font-size: 0.33rem;
 	}
 

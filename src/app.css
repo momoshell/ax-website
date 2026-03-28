@@ -23,7 +23,7 @@
 	--z-loader: 1000;
 	
 	/* Fonts */
-	--font-display: 'Outfit', sans-serif;
+	--font-display: 'Space Grotesk', sans-serif;
 	--font-mono: 'IBM Plex Mono', monospace;
 	
 	/* Spacing */
@@ -137,7 +137,7 @@ body {
 
 .section-title {
 	font-family: var(--font-display);
-	font-weight: 900;
+	font-weight: 700;
 	font-size: clamp(2.5rem, 6vw, 5rem);
 	letter-spacing: 0.02em;
 	line-height: 1;

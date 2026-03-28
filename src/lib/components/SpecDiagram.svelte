@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { prefersReducedMotion } from '$lib/utils/scroll';
+	import { setupCanvas, createAnimationLoop, prefersReducedMotion } from '$lib/utils/canvas';
 
 	type DiagramShape = 'neural' | 'circuit' | 'arch' | 'radar';
 
@@ -11,15 +11,17 @@
 	let { shape }: Props = $props();
 
 	let canvas: HTMLCanvasElement;
-	let animationId: number;
 
 	onMount(() => {
 		if (prefersReducedMotion()) {
 			return;
 		}
 
-		const ctx = canvas.getContext('2d');
+		const ctx = setupCanvas(canvas);
 		if (!ctx) return;
+
+		// Extract ctx for closure (TypeScript narrowing)
+		const c = ctx;
 
 		const S = 136;
 		const C = S / 2;
@@ -44,12 +46,12 @@
 				nodePositions[l].forEach((a, ai) => {
 					nodePositions[l + 1].forEach((b, bi) => {
 						const pulse = Math.sin(t * 2 + l + ai * 0.5 + bi * 0.3) * 0.5 + 0.5;
-						ctx!.strokeStyle = `rgba(200,210,225,${0.15 + pulse * 0.25})`;
-						ctx!.lineWidth = 0.6;
-						ctx!.beginPath();
-						ctx!.moveTo(a.x, a.y);
-						ctx!.lineTo(b.x, b.y);
-						ctx!.stroke();
+						c.strokeStyle = `rgba(200,210,225,${0.15 + pulse * 0.25})`;
+						c.lineWidth = 0.6;
+						c.beginPath();
+						c.moveTo(a.x, a.y);
+						c.lineTo(b.x, b.y);
+						c.stroke();
 					});
 				});
 			}
@@ -58,10 +60,10 @@
 			nodePositions.forEach((layer, li) => {
 				layer.forEach((p, ni) => {
 					const pulse = Math.sin(t * 1.5 + li + ni) * 0.5 + 0.5;
-					ctx!.beginPath();
-					ctx!.arc(p.x, p.y, 2 + pulse * 1.5, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${0.5 + pulse * 0.45})`;
-					ctx!.fill();
+					c.beginPath();
+					c.arc(p.x, p.y, 2 + pulse * 1.5, 0, Math.PI * 2);
+					c.fillStyle = `rgba(210,218,230,${0.5 + pulse * 0.45})`;
+					c.fill();
 				});
 			});
 		}
@@ -79,30 +81,30 @@
 
 					// Horizontal connection
 					if (x < grid - 1) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.2})`;
-						ctx!.lineWidth = 0.6;
-						ctx!.beginPath();
-						ctx!.moveTo(px, py);
-						ctx!.lineTo(px + gap, py);
-						ctx!.stroke();
+						c.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.2})`;
+						c.lineWidth = 0.6;
+						c.beginPath();
+						c.moveTo(px, py);
+						c.lineTo(px + gap, py);
+						c.stroke();
 					}
 
 					// Vertical connection
 					if (y < grid - 1) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.15})`;
-						ctx!.lineWidth = 0.6;
-						ctx!.beginPath();
-						ctx!.moveTo(px, py);
-						ctx!.lineTo(px, py + gap);
-						ctx!.stroke();
+						c.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.15})`;
+						c.lineWidth = 0.6;
+						c.beginPath();
+						c.moveTo(px, py);
+						c.lineTo(px, py + gap);
+						c.stroke();
 					}
 
 					// Node
 					const isActive = (x + y + Math.floor(t)) % 3 === 0;
-					ctx!.beginPath();
-					ctx!.arc(px, py, isActive ? 3 : 1.5, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${isActive ? 0.85 : 0.35})`;
-					ctx!.fill();
+					c.beginPath();
+					c.arc(px, py, isActive ? 3 : 1.5, 0, Math.PI * 2);
+					c.fillStyle = `rgba(210,218,230,${isActive ? 0.85 : 0.35})`;
+					c.fill();
 				}
 			}
 		}
@@ -122,27 +124,27 @@
 
 					// Connect to center for inner rings
 					if (li > 0) {
-						ctx!.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.18})`;
-						ctx!.lineWidth = 0.6;
-						ctx!.beginPath();
-						ctx!.moveTo(C, C);
-						ctx!.lineTo(x, y);
-						ctx!.stroke();
+						c.strokeStyle = `rgba(200,210,225,${0.12 + pulse * 0.18})`;
+						c.lineWidth = 0.6;
+						c.beginPath();
+						c.moveTo(C, C);
+						c.lineTo(x, y);
+						c.stroke();
 					}
 
-					ctx!.beginPath();
-					ctx!.arc(x, y, 1.5 + pulse, 0, Math.PI * 2);
-					ctx!.fillStyle = `rgba(210,218,230,${0.45 + pulse * 0.4})`;
-					ctx!.fill();
+					c.beginPath();
+					c.arc(x, y, 1.5 + pulse, 0, Math.PI * 2);
+					c.fillStyle = `rgba(210,218,230,${0.45 + pulse * 0.4})`;
+					c.fill();
 				}
 
 				// Ring
 				if (r > 0) {
-					ctx!.beginPath();
-					ctx!.arc(C, C, r, 0, Math.PI * 2);
-ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
-					ctx!.lineWidth = 0.6;
-					ctx!.stroke();
+					c.beginPath();
+					c.arc(C, C, r, 0, Math.PI * 2);
+					c.strokeStyle = 'rgba(200,210,225,0.15)';
+					c.lineWidth = 0.6;
+					c.stroke();
 				}
 			});
 		}
@@ -153,32 +155,32 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 
 			// Concentric rings - subtle
 			for (let r = 15; r <= 50; r += 12) {
-				ctx!.beginPath();
-				ctx!.arc(C, C, r, 0, Math.PI * 2);
-				ctx!.strokeStyle = 'rgba(200,210,225,0.25)';
-				ctx!.lineWidth = 0.8;
-				ctx!.stroke();
+				c.beginPath();
+				c.arc(C, C, r, 0, Math.PI * 2);
+				c.strokeStyle = 'rgba(200,210,225,0.25)';
+				c.lineWidth = 0.8;
+				c.stroke();
 			}
 
 			// Cross lines - subtle
-			ctx!.strokeStyle = 'rgba(200,210,225,0.2)';
-			ctx!.lineWidth = 0.6;
-			ctx!.beginPath();
-			ctx!.moveTo(C - 50, C);
-			ctx!.lineTo(C + 50, C);
-			ctx!.stroke();
-			ctx!.beginPath();
-			ctx!.moveTo(C, C - 50);
-			ctx!.lineTo(C, C + 50);
-			ctx!.stroke();
+			c.strokeStyle = 'rgba(200,210,225,0.2)';
+			c.lineWidth = 0.6;
+			c.beginPath();
+			c.moveTo(C - 50, C);
+			c.lineTo(C + 50, C);
+			c.stroke();
+			c.beginPath();
+			c.moveTo(C, C - 50);
+			c.lineTo(C, C + 50);
+			c.stroke();
 
 			// Sweep line - moderate brightness
-			ctx!.strokeStyle = 'rgba(210,220,235,0.6)';
-			ctx!.lineWidth = 1.2;
-			ctx!.beginPath();
-			ctx!.moveTo(C, C);
-			ctx!.lineTo(C + Math.cos(sweepAngle) * 50, C + Math.sin(sweepAngle) * 50);
-			ctx!.stroke();
+			c.strokeStyle = 'rgba(210,220,235,0.6)';
+			c.lineWidth = 1.2;
+			c.beginPath();
+			c.moveTo(C, C);
+			c.lineTo(C + Math.cos(sweepAngle) * 50, C + Math.sin(sweepAngle) * 50);
+			c.stroke();
 
 			// Data blips - small and subtle with pulse
 			const blips = [
@@ -193,20 +195,20 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 				const x = C + Math.cos(a) * r;
 				const y = C + Math.sin(a) * r;
 				const pulse = Math.sin(t * 2 + aOff) * 0.5 + 0.5;
-				ctx!.beginPath();
-				ctx!.arc(x, y, 2 + pulse, 0, Math.PI * 2);
-				ctx!.fillStyle = `rgba(210,220,235,${0.4 + pulse * 0.4})`;
-				ctx!.fill();
+				c.beginPath();
+				c.arc(x, y, 2 + pulse, 0, Math.PI * 2);
+				c.fillStyle = `rgba(210,220,235,${0.4 + pulse * 0.4})`;
+				c.fill();
 			});
 		}
 
-		function draw() {
-			ctx!.clearRect(0, 0, S, S);
+		const anim = createAnimationLoop(() => {
+			c.clearRect(0, 0, S, S);
 			const t = performance.now() * 0.001;
 
-			ctx!.strokeStyle = 'rgba(200,210,225,0.3)';
-			ctx!.fillStyle = 'rgba(200,210,225,0.5)';
-			ctx!.lineWidth = 0.6;
+			c.strokeStyle = 'rgba(200,210,225,0.3)';
+			c.fillStyle = 'rgba(200,210,225,0.5)';
+			c.lineWidth = 0.6;
 
 			switch (shape) {
 				case 'neural':
@@ -222,18 +224,14 @@ ctx!.strokeStyle = 'rgba(200,210,225,0.15)';
 					drawRadar(t);
 					break;
 			}
+		});
 
-			animationId = requestAnimationFrame(draw);
-		}
-
-		draw();
+		anim.start();
 
 		return () => {
-			if (animationId) {
-				cancelAnimationFrame(animationId);
-			}
+			anim.stop();
 		};
 	});
 </script>
 
-<canvas bind:this={canvas} width="136" height="136" class="w-[68px] h-[68px]"></canvas>
+<canvas bind:this={canvas} width="136" height="136" class="w-[68px] h-[68px]" aria-label="Animated technical diagram"></canvas>

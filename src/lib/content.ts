@@ -58,7 +58,7 @@ export async function loadContent(section: string): Promise<
 	return {
 		...metadata,
 		body
-	} as HeroContent & { body: string };
+	} as Awaited<ReturnType<typeof loadContent>>;
 }
 
 /**

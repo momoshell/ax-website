@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { setupCanvas, createAnimationLoop } from '$lib/utils/canvas';
+	import SlashDecor from '$lib/components/ui/SlashDecor.svelte';
 
 	let dateValue = $state('--/--/----');
 	let timeValue = $state('--:--:--');
 	let isVisible = $state(false);
-
-	// Animation frame IDs for cleanup
-	let morphAnimId: number;
-	let barcodeAnimId: number;
 
 	onMount(() => {
 		function updateDateTime() {
@@ -33,26 +31,26 @@
 		}, 100);
 
 		// Initialize 3D morph canvas
-		initMorphCanvas();
+		const morphAnim = initMorphCanvas();
 
 		// Initialize barcode canvas
-		initBarcodeCanvas();
+		const barcodeAnim = initBarcodeCanvas();
 
 		return () => {
 			clearInterval(interval);
-			cancelAnimationFrame(morphAnimId);
-			cancelAnimationFrame(barcodeAnimId);
+			morphAnim?.stop();
+			barcodeAnim?.stop();
 		};
 	});
 
-	function initMorphCanvas() {
-		if (!browser) return;
+	function initMorphCanvas(): { stop: () => void } | undefined {
+		if (!browser) return undefined;
 		
 		const canvas = document.getElementById('morphCanvas') as HTMLCanvasElement | null;
-		if (!canvas) return;
+		if (!canvas) return undefined;
 		
-		const ctx = canvas.getContext('2d');
-		if (!ctx) return;
+		const ctx = setupCanvas(canvas);
+		if (!ctx) return undefined;
 		
 		// Extract ctx for closure (TypeScript narrowing)
 		const c = ctx;
@@ -247,21 +245,21 @@
 			c.strokeStyle = 'rgba(200,210,225,0.06)';
 			c.lineWidth = 0.3;
 			c.stroke();
-
-			morphAnimId = requestAnimationFrame(draw);
 		}
 
-		morphAnimId = requestAnimationFrame(draw);
+		const anim = createAnimationLoop(draw);
+		anim.start();
+		return { stop: () => anim.stop() };
 	}
 
-	function initBarcodeCanvas() {
-		if (!browser) return;
+	function initBarcodeCanvas(): { stop: () => void } | undefined {
+		if (!browser) return undefined;
 		
 		const canvas = document.getElementById('cardBarcodeCanvas') as HTMLCanvasElement | null;
-		if (!canvas) return;
+		if (!canvas) return undefined;
 		
-		const ctx = canvas.getContext('2d');
-		if (!ctx) return;
+		const ctx = setupCanvas(canvas);
+		if (!ctx) return undefined;
 		
 		// Extract ctx for closure (TypeScript narrowing)
 		const c = ctx;
@@ -303,10 +301,11 @@
 				c.fillStyle = `rgba(232,230,227,${alpha})`;
 				c.fillRect(x, 0, w, H);
 			});
-			barcodeAnimId = requestAnimationFrame(draw);
 		}
 
-		barcodeAnimId = requestAnimationFrame(draw);
+		const anim = createAnimationLoop(draw);
+		anim.start();
+		return { stop: () => anim.stop() };
 	}
 </script>
 
@@ -334,19 +333,19 @@
 			</div>
 		</div>
 		<div class="cell">
-			<div class="cell-label">TRADEMARK <span class="slashes">///////////////</span></div>
+			<div class="cell-label">TRADEMARK <SlashDecor count={15} class="slashes" /></div>
 			<div class="cell-value">A&X.LABS.ENGINEERING</div>
 		</div>
 		<div class="cell">
-			<div class="cell-label">DATE <span class="slashes">////////////////</span></div>
+			<div class="cell-label">DATE <SlashDecor count={16} class="slashes" /></div>
 			<div class="cell-value cell-value-lg">{dateValue}</div>
 		</div>
 		<div class="cell">
-			<div class="cell-label">DESIGNER <span class="slashes">///////////////</span></div>
+			<div class="cell-label">DESIGNER <SlashDecor count={15} class="slashes" /></div>
 			<div class="cell-value">C'TAN</div>
 		</div>
 		<div class="cell">
-			<div class="cell-label">TIME <span class="slashes">/////////////////</span></div>
+			<div class="cell-label">TIME <SlashDecor count={17} class="slashes" /></div>
 			<div class="cell-value cell-value-lg">{timeValue}</div>
 		</div>
 	</div>
@@ -448,10 +447,8 @@
 		gap: 6px;
 	}
 
-	.cell-label .slashes {
+	.cell-label :global(.slash-decor.slashes) {
 		font-size: 0.35rem;
-		color: rgba(255, 255, 255, 0.07);
-		letter-spacing: 0.05em;
 	}
 
 	.cell-value {

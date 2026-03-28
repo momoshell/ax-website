@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import { prefersReducedMotion } from '$lib/utils/scroll';
+	import { setupCanvas, createAnimationLoop, createResizeHandler, prefersReducedMotion } from '$lib/utils/canvas';
 
 	interface Body {
 		cx: number;
@@ -62,11 +62,9 @@
 	}
 
 	let canvas: HTMLCanvasElement;
-	let ctx: CanvasRenderingContext2D | null = null;
-	let animationId: number;
 	let mxInit = false;
 	let mxCols = 0;
-	let mxFS = 11;
+	const mxFS = 11;
 	let mxStreams: MatrixStream[] = [];
 	let mxFrame = 0;
 
@@ -143,9 +141,11 @@
 			return;
 		}
 
-		const context = canvas.getContext('2d');
-		if (!context) return;
-		ctx = context;
+		const ctx = setupCanvas(canvas);
+		if (!ctx) return;
+
+		// Extract ctx for closure (TypeScript narrowing)
+		const c = ctx;
 
 		let W = canvas.width;
 		let H = canvas.height;
@@ -174,7 +174,8 @@
 			mxStreams = [];
 		}
 
-		resize();
+		const resizer = createResizeHandler(resize);
+		resizer.start();
 
 		// Body particles
 		const BODY_P = 1800;
@@ -224,11 +225,7 @@
 			});
 		}
 
-		window.addEventListener('resize', resize);
-
 		function drawMatrixRain() {
-			if (!ctx) return;
-
 			if (!mxInit) {
 				mxCols = Math.floor(W / mxFS);
 				mxStreams = [];
@@ -250,7 +247,7 @@
 				return;
 			}
 
-			ctx.font = mxFS + 'px "IBM Plex Mono", monospace';
+			c.font = mxFS + 'px "IBM Plex Mono", monospace';
 
 			mxStreams.forEach((stream) => {
 				stream.nextSpawn--;
@@ -269,7 +266,6 @@
 					stream.nextSpawn = 15 + Math.random() * 80;
 				}
 
-				const context = ctx!;
 				stream.drops.forEach((drop) => {
 					drop.y += drop.speed;
 
@@ -281,16 +277,16 @@
 						drop.chars[idx] = Math.random() > 0.5 ? '1' : '0';
 					}
 
-					context.fillStyle = 'rgba(120,135,165,0.08)';
-					context.fillText(drop.char, stream.x, drop.y);
+					c.fillStyle = 'rgba(120,135,165,0.08)';
+					c.fillText(drop.char, stream.x, drop.y);
 
 					for (let t = 1; t <= drop.trail; t++) {
 						const ty = drop.y - t * mxFS;
 						if (ty < -mxFS) continue;
 						const fade = 1 - t / drop.trail;
 						const alpha = fade * fade * 0.05;
-						context.fillStyle = 'rgba(90,105,140,' + alpha + ')';
-						context.fillText(drop.chars[t % drop.chars.length], stream.x, ty);
+						c.fillStyle = 'rgba(90,105,140,' + alpha + ')';
+						c.fillText(drop.chars[t % drop.chars.length], stream.x, ty);
 					}
 				});
 
@@ -299,9 +295,6 @@
 		}
 
 		function drawBgParticles(t: number) {
-			if (!ctx) return;
-			const context = ctx;
-
 			bgPts.forEach((bp) => {
 				bp.y += (bp.vy / H) * 0.7;
 				bp.x += (bp.vx / W) * 0.2 + Math.sin(t * 0.25 + bp.y * 4) * 0.0002;
@@ -329,18 +322,16 @@
 					}
 				}
 				if (!nearFig) bp.a = bp.baseA;
-				context.beginPath();
-				context.arc(px, py, bp.r, 0, Math.PI * 2);
-				context.fillStyle = `rgba(140,150,180,${bp.a})`;
-				context.fill();
+				c.beginPath();
+				c.arc(px, py, bp.r, 0, Math.PI * 2);
+				c.fillStyle = `rgba(140,150,180,${bp.a})`;
+				c.fill();
 			});
 		}
 
 		function drawBacklight() {
-			if (!ctx) return;
-
 			bodies.forEach((b) => {
-				const grad = ctx!.createRadialGradient(
+				const grad = c.createRadialGradient(
 					b.cx,
 					b.topY + b.totalH * 0.28,
 					0,
@@ -350,26 +341,24 @@
 				);
 				grad.addColorStop(0, 'rgba(115,135,180,0.025)');
 				grad.addColorStop(1, 'transparent');
-				ctx!.fillStyle = grad;
-				ctx!.fillRect(b.cx - b.totalH * 0.5, b.topY - 15, b.totalH, b.totalH + 20);
+				c.fillStyle = grad;
+				c.fillRect(b.cx - b.totalH * 0.5, b.topY - 15, b.totalH, b.totalH + 20);
 			});
 		}
 
 		function drawTable() {
-			if (!ctx || bodies.length === 0) return;
+			if (bodies.length === 0) return;
 
 			const tY = bodies[0].tableY;
-			ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-			ctx.lineWidth = 0.5;
-			ctx.beginPath();
-			ctx.moveTo(0, tY);
-			ctx.lineTo(W, tY);
-			ctx.stroke();
+			c.strokeStyle = 'rgba(255,255,255,0.03)';
+			c.lineWidth = 0.5;
+			c.beginPath();
+			c.moveTo(0, tY);
+			c.lineTo(W, tY);
+			c.stroke();
 		}
 
 		function drawBodyParticles(t: number) {
-			if (!ctx) return;
-
 			bodyPts.forEach((pt) => {
 				if (pt.bi >= bodies.length) return;
 				const body = bodies[pt.bi];
@@ -435,8 +424,6 @@
 		}
 
 		function drawConnections() {
-			if (!ctx) return;
-
 			for (let i = 0; i < bodyPts.length; i++) {
 				const pi = bodyPts[i];
 				if (!pi.init || pi.a < 0.04) continue;
@@ -448,59 +435,52 @@
 					const d2 = dx * dx + dy * dy;
 					if (d2 < 484) {
 						const d = Math.sqrt(d2);
-						ctx.beginPath();
-						ctx.moveTo(pi.x, pi.y);
-						ctx.lineTo(pj.x, pj.y);
-						ctx.strokeStyle = `rgba(150,165,200,${(1 - d / 22) * Math.min(pi.a, pj.a) * 0.4})`;
-						ctx.lineWidth = 0.35;
-						ctx.stroke();
+						c.beginPath();
+						c.moveTo(pi.x, pi.y);
+						c.lineTo(pj.x, pj.y);
+						c.strokeStyle = `rgba(150,165,200,${(1 - d / 22) * Math.min(pi.a, pj.a) * 0.4})`;
+						c.lineWidth = 0.35;
+						c.stroke();
 					}
 				}
 			}
 		}
 
 		function drawBodyParticlesOnCanvas() {
-			if (!ctx) return;
-			const context = ctx;
-
 			bodyPts.forEach((pt) => {
 				if (!pt.init || pt.a < 0.008) return;
-				context.beginPath();
-				context.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
-				context.fillStyle = `rgba(185,198,222,${pt.a})`;
-				context.fill();
+				c.beginPath();
+				c.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+				c.fillStyle = `rgba(185,198,222,${pt.a})`;
+				c.fill();
 				if (pt.a > 0.28 && pt.r > 0.7) {
-					context.beginPath();
-					context.arc(pt.x, pt.y, pt.r * 3, 0, Math.PI * 2);
-					context.fillStyle = `rgba(150,168,208,${pt.a * 0.05})`;
-					context.fill();
+					c.beginPath();
+					c.arc(pt.x, pt.y, pt.r * 3, 0, Math.PI * 2);
+					c.fillStyle = `rgba(150,168,208,${pt.a * 0.05})`;
+					c.fill();
 				}
 			});
 		}
 
 		function drawReflection() {
-			if (!ctx || bodies.length === 0) return;
-			const context = ctx;
+			if (bodies.length === 0) return;
 
 			const tY = bodies[0].tableY;
-			context.save();
-			context.globalAlpha = 0.04;
-			context.translate(0, tY * 2);
-			context.scale(1, -1);
+			c.save();
+			c.globalAlpha = 0.04;
+			c.translate(0, tY * 2);
+			c.scale(1, -1);
 			bodyPts.forEach((pt) => {
 				if (!pt.init || pt.a < 0.12 || pt.y < tY - 50) return;
-				context.beginPath();
-				context.arc(pt.x, pt.y, pt.r * 0.6, 0, Math.PI * 2);
-				context.fillStyle = `rgba(165,180,210,${pt.a * 0.35})`;
-				context.fill();
+				c.beginPath();
+				c.arc(pt.x, pt.y, pt.r * 0.6, 0, Math.PI * 2);
+				c.fillStyle = `rgba(165,180,210,${pt.a * 0.35})`;
+				c.fill();
 			});
-			context.restore();
+			c.restore();
 		}
 
 		function drawAmbientParticles(t: number) {
-			if (!ctx) return;
-			const context = ctx;
-
 			ambPts.forEach((ap) => {
 				ap.y += ap.vy;
 				ap.x += ap.vx + Math.sin(t * 0.2 + ap.seed) * 0.02;
@@ -510,42 +490,38 @@
 				}
 				if (ap.x < -5) ap.x = W + 5;
 				if (ap.x > W + 5) ap.x = -5;
-				context.beginPath();
-				context.arc(ap.x, ap.y, ap.r, 0, Math.PI * 2);
-				context.fillStyle = `rgba(100,110,140,${ap.a})`;
-				context.fill();
+				c.beginPath();
+				c.arc(ap.x, ap.y, ap.r, 0, Math.PI * 2);
+				c.fillStyle = `rgba(100,110,140,${ap.a})`;
+				c.fill();
 			});
 		}
 
 		function drawCorners() {
-			if (!ctx) return;
-
 			const m = 12;
-			ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-			ctx.lineWidth = 0.5;
+			c.strokeStyle = 'rgba(255,255,255,0.05)';
+			c.lineWidth = 0.5;
 			[
 				[m, m, 1, 1],
 				[W - m, m, -1, 1],
 				[m, H - m, 1, -1],
 				[W - m, H - m, -1, -1]
 			].forEach(([x, y, dx, dy]) => {
-				ctx!.beginPath();
-				ctx!.moveTo(x, y);
-				ctx!.lineTo(x + dx * 10, y);
-				ctx!.stroke();
-				ctx!.beginPath();
-				ctx!.moveTo(x, y);
-				ctx!.lineTo(x, y + dy * 10);
-				ctx!.stroke();
+				c.beginPath();
+				c.moveTo(x, y);
+				c.lineTo(x + dx * 10, y);
+				c.stroke();
+				c.beginPath();
+				c.moveTo(x, y);
+				c.lineTo(x, y + dy * 10);
+				c.stroke();
 			});
 		}
 
-		function animate(ts: number) {
-			if (!ctx) return;
-
+		const anim = createAnimationLoop((ts: number) => {
 			const t = ts * 0.001;
 
-			ctx.clearRect(0, 0, W, H);
+			c.clearRect(0, 0, W, H);
 
 			// Matrix rain background
 			drawMatrixRain();
@@ -576,20 +552,18 @@
 
 			// Corners
 			drawCorners();
+		});
 
-			animationId = requestAnimationFrame(animate);
-		}
-
-		animationId = requestAnimationFrame(animate);
+		anim.start();
 
 		return () => {
-			cancelAnimationFrame(animationId);
-			window.removeEventListener('resize', resize);
+			anim.stop();
+			resizer.stop();
 		};
 	});
 </script>
 
-<canvas bind:this={canvas} class="about-visual-canvas"></canvas>
+<canvas bind:this={canvas} class="about-visual-canvas" aria-label="Animated geometric visualization"></canvas>
 
 <style>
 	.about-visual-canvas {

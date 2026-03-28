@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import { prefersReducedMotion } from '$lib/utils/scroll';
+	import { setupCanvas, createAnimationLoop, createResizeHandler, prefersReducedMotion } from '$lib/utils/canvas';
 
 	interface Props {
 		revealProgress?: number;
@@ -10,7 +10,6 @@
 	let { revealProgress = 0 }: Props = $props();
 
 	let canvas: HTMLCanvasElement;
-	let animationId: number;
 
 	interface ParticleTarget {
 		x: number;
@@ -206,7 +205,7 @@
 			return;
 		}
 
-		const ctx = canvas.getContext('2d');
+		const ctx = setupCanvas(canvas);
 		if (!ctx) return;
 		const c = ctx;
 
@@ -218,8 +217,8 @@
 			W = canvas.width = window.innerWidth;
 			H = canvas.height = window.innerHeight;
 		}
-		window.addEventListener('resize', resize);
-		resize();
+		const resizer = createResizeHandler(resize);
+		resizer.start();
 
 		let formations = getFormations(W, H);
 		const TOTAL = 420;
@@ -310,7 +309,7 @@
 			});
 		}
 
-		function animate(ts: number) {
+		const anim = createAnimationLoop((ts: number) => {
 			time = ts;
 			c.clearRect(0, 0, W, H);
 
@@ -319,23 +318,23 @@
 			drawGeo(revealProgress);
 			particles.forEach(p => p.draw(c, revealProgress));
 			drawFrags(revealProgress, W, H);
+		});
 
-			animationId = requestAnimationFrame(animate);
-		}
-
-		animationId = requestAnimationFrame(animate);
-
-		document.addEventListener('mousemove', e => {
+		const handleMouseMove = (e: MouseEvent) => {
 			mouseState.x = e.clientX;
 			mouseState.y = e.clientY;
 			mouseState.active = true;
-		});
+		};
 
-		document.addEventListener('mouseleave', () => {
+		const handleMouseLeave = () => {
 			mouseState.active = false;
-		});
+		};
 
-		window.addEventListener('resize', () => {
+		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mouseleave', handleMouseLeave);
+
+		// Additional resize handler for particle/formation recalculation
+		const particleResizer = createResizeHandler(() => {
 			formations = getFormations(window.innerWidth, window.innerHeight);
 			particles = Array.from({ length: TOTAL }, (_, i) => createParticle(i, formations, window.innerWidth, window.innerHeight));
 			// Reset frags positions to stay within new canvas bounds
@@ -344,15 +343,21 @@
 				f.y = Math.random() * window.innerHeight;
 			});
 		});
+		particleResizer.start();
+
+		anim.start();
 
 		return () => {
-			cancelAnimationFrame(animationId);
-			window.removeEventListener('resize', resize);
+			anim.stop();
+			resizer.stop();
+			particleResizer.stop();
+			document.removeEventListener('mousemove', handleMouseMove);
+			document.removeEventListener('mouseleave', handleMouseLeave);
 		};
 	});
 </script>
 
-<canvas bind:this={canvas} id="mainCanvas"></canvas>
+<canvas bind:this={canvas} id="mainCanvas" aria-label="Animated particle network visualization"></canvas>
 
 <style>
 	canvas {

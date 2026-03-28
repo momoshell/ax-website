@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import SlashDecor from '$lib/components/ui/SlashDecor.svelte';
 
 	interface Props {
 		onComplete?: () => void;
@@ -52,14 +53,14 @@
 		<div class="lc-tick-l"></div>
 		<div class="lc-tick-r"></div>
 		<div class="loader-header">
-			SYSTEM <span style="margin-left:6px;letter-spacing:0.08em;color:rgba(255,255,255,0.08)">//////////////////////</span>
+			SYSTEM <SlashDecor count={22} class="loader-slash-header" />
 		</div>
 		<div class="loader-percent">{String(Math.floor(progress)).padStart(3, '0')}</div>
 		<div class="loader-bar-track">
 			<div class="loader-bar-fill" style="width: {progress}%"></div>
 		</div>
 		<div class="loader-label">{currentLabel}</div>
-		<div class="loader-slashes">////////////////////////////////////</div>
+		<SlashDecor count={34} class="loader-slashes" />
 	</div>
 </div>
 
@@ -181,11 +182,16 @@
 		margin-top: 12px;
 	}
 
-	.loader-slashes {
+	:global(.slash-decor.loader-slashes) {
 		font-family: 'IBM Plex Mono', monospace;
 		font-size: 0.45rem;
 		color: rgba(255, 255, 255, 0.08);
 		letter-spacing: 0.15em;
 		margin-top: 8px;
+	}
+
+	:global(.slash-decor.loader-slash-header) {
+		margin-left: 6px;
+		letter-spacing: 0.08em;
 	}
 </style>

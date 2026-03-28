@@ -12,11 +12,11 @@ export default {
 				'body-text': '#9a9aa4',
 				'surface': 'rgba(10, 10, 15, 0.3)',
 			},
-			fontFamily: {
-				display: ['Outfit', 'sans-serif'],
-				mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
-				sans: ['Outfit', 'sans-serif']
-			},
+fontFamily: {
+			display: ['Space Grotesk', 'sans-serif'],
+			mono: ['IBM Plex Mono', 'Consolas', 'monospace'],
+			sans: ['Space Grotesk', 'sans-serif']
+		},
 			fontSize: {
 				hero: ['72px', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
 				h2: ['48px', { lineHeight: '1.2', letterSpacing: '-0.01em' }],

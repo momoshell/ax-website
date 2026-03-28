@@ -5,6 +5,7 @@
 	import BinaryRain from '$lib/components/BinaryRain.svelte';
 	import HUDGrid from '$lib/components/HUDGrid.svelte';
 	import HUDCard from '$lib/components/HUDCard.svelte';
+	import { runTimeline } from '$lib/utils/timeline';
 
 	let revealProgress = $state(0);
 	let showBinary = $state(false);
@@ -42,59 +43,24 @@
 		const clockInterval = setInterval(updateClock, 1000);
 
 		// Start reveal animation sequence
-		setTimeout(() => {
-			showBinary = true;
-		}, 200);
-
-		setTimeout(() => {
-			cornerMarksVisible = true;
-			crosshairVisible = true;
-		}, 600);
-
-		setTimeout(() => {
-			revealProgress = 0.15;
-		}, 800);
-
-		setTimeout(() => {
-			revealProgress = 0.4;
-		}, 1200);
-
-		setTimeout(() => {
-			revealProgress = 0.7;
-		}, 1600);
-
-		setTimeout(() => {
-			revealProgress = 1;
-			showContent = true;
-		}, 1800);
-
-		setTimeout(() => {
-			titleVisible = true;
-		}, 1900);
-
-		setTimeout(() => {
-			glitchActive = true;
-		}, 2200);
-
-		setTimeout(() => {
-			glitchActive = false;
-			subLabelVisible = true;
-		}, 2500);
-
-		setTimeout(() => {
-			taglineVisible = true;
-		}, 2700);
-
-		setTimeout(() => {
-			ctaVisible = true;
-		}, 2900);
-
-		setTimeout(() => {
-			hudCardsVisible = true;
-		}, 3000);
+		const cleanupTimeline = runTimeline([
+			{ delay: 200, action: () => { showBinary = true; } },
+			{ delay: 600, action: () => { cornerMarksVisible = true; crosshairVisible = true; } },
+			{ delay: 800, action: () => { revealProgress = 0.15; } },
+			{ delay: 1200, action: () => { revealProgress = 0.4; } },
+			{ delay: 1600, action: () => { revealProgress = 0.7; } },
+			{ delay: 1800, action: () => { revealProgress = 1; showContent = true; } },
+			{ delay: 1900, action: () => { titleVisible = true; } },
+			{ delay: 2200, action: () => { glitchActive = true; } },
+			{ delay: 2500, action: () => { glitchActive = false; subLabelVisible = true; } },
+			{ delay: 2700, action: () => { taglineVisible = true; } },
+			{ delay: 2900, action: () => { ctaVisible = true; } },
+			{ delay: 3000, action: () => { hudCardsVisible = true; } }
+		]);
 
 		return () => {
 			clearInterval(clockInterval);
+			cleanupTimeline();
 		};
 	});
 </script>
@@ -126,10 +92,10 @@
 	<div class="crosshair" class:visible={crosshairVisible}></div>
 
 	<!-- HUD Cards -->
-	<HUDCard position="tl" label="STATUS" value="ONLINE" slashes="////////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="tr" label="SECURITY" value="ENCRYPTED" slashes="////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="bl" label="NODE" value="0xAF91.ACTIVE" slashes="////////////////////////" visible={hudCardsVisible} />
-	<HUDCard position="br" label="VERSION" value="V2.4.1" slashes="////////////////////" visible={hudCardsVisible} />
+	<HUDCard position="tl" label="STATUS" value="ONLINE" slashes={20} visible={hudCardsVisible} />
+	<HUDCard position="tr" label="SECURITY" value="ENCRYPTED" slashes={18} visible={hudCardsVisible} />
+	<HUDCard position="bl" label="NODE" value="0xAF91.ACTIVE" slashes={20} visible={hudCardsVisible} />
+	<HUDCard position="br" label="VERSION" value="V2.4.1" slashes={18} visible={hudCardsVisible} />
 	<HUDGrid />
 
 	<!-- Main content (z-index: 10) -->
@@ -320,8 +286,8 @@
 	}
 
 	.title {
-		font-family: 'Outfit', sans-serif;
-		font-weight: 900;
+		font-family: var(--font-display);
+		font-weight: 700;
 		font-size: clamp(3rem, 8.5vw, 7.5rem);
 		letter-spacing: 0.03em;
 		line-height: 1;
@@ -347,8 +313,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-family: 'Outfit', sans-serif;
-		font-weight: 900;
+		font-family: var(--font-display);
+		font-weight: 700;
 		font-size: clamp(3rem, 8.5vw, 7.5rem);
 		letter-spacing: 0.03em;
 		line-height: 1;

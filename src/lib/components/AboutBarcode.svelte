@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { setupCanvas, createAnimationLoop } from '$lib/utils/canvas';
 
 	let canvas: HTMLCanvasElement;
 
 	onMount(() => {
 		if (!browser || !canvas) return;
 
-		const ctx = canvas.getContext('2d');
+		const ctx = setupCanvas(canvas);
 		if (!ctx) return;
 
-		const localCtx = ctx;
 		const W = canvas.width;
 		const H = canvas.height;
 		const BAR_COUNT = 35;
@@ -37,26 +37,23 @@
 
 		const scale = W / xPos;
 
-		let animId: number;
-
-		function draw() {
-			localCtx.clearRect(0, 0, W, H);
+		const anim = createAnimationLoop(() => {
+			ctx.clearRect(0, 0, W, H);
 			const t = performance.now() * 0.001;
 			bars.forEach(b => {
 				const wave = Math.sin(t * b.speed + b.phase);
 				const w = Math.max(0.5, b.baseW + wave * 1.8) * scale;
 				const x = b.x * scale;
 				const alpha = 0.3 + (wave * 0.5 + 0.5) * 0.35;
-				localCtx.fillStyle = `rgba(232,230,227,${alpha})`;
-				localCtx.fillRect(x, 0, w, H);
+				ctx.fillStyle = `rgba(232,230,227,${alpha})`;
+				ctx.fillRect(x, 0, w, H);
 			});
-			animId = requestAnimationFrame(draw);
-		}
+		});
 
-		draw();
+		anim.start();
 
 		return () => {
-			cancelAnimationFrame(animId);
+			anim.stop();
 		};
 	});
 </script>

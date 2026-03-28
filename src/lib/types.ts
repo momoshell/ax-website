@@ -9,10 +9,20 @@ export interface HeroContent {
 	body: string;
 }
 
+export interface ServiceMeta {
+	type: string;
+	status: string;
+	ref: string;
+}
+
 export interface Service {
 	title: string;
 	description: string;
 	icon: string;
+	number: string;
+	codename: string;
+	diagramShape: 'neural' | 'circuit' | 'arch' | 'radar';
+	meta: ServiceMeta;
 }
 
 export interface ServicesContent {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SpecDiagram from './SpecDiagram.svelte';
+	import SlashDecor from '$lib/components/ui/SlashDecor.svelte';
 
 	type DiagramShape = 'neural' | 'circuit' | 'arch' | 'radar';
 
@@ -19,10 +20,6 @@
 	}
 
 	let { number, codename, title, description, diagramShape, meta }: Props = $props();
-
-	// Generate slashes for decoration
-	const slashes = '////////////////////////////';
-	const codenameSlashes = '////////';
 </script>
 
 <div class="spec-card">
@@ -33,11 +30,13 @@
 	<div class="spec-header">
 		<div>
 			<div class="spec-codename">
-				CODENAME <span class="spec-slashes-fixed">{codenameSlashes}</span>
+				CODENAME <SlashDecor count={8} class="spec-slashes-fixed" />
 			</div>
 			<div class="spec-id">{codename}</div>
 		</div>
-		<div class="spec-slashes-overflow">{slashes}</div>
+		<div class="spec-slashes-overflow">
+			<SlashDecor count={24} />
+		</div>
 	</div>
 
 	<div class="spec-body">
@@ -147,22 +146,18 @@
 		font-weight: 600;
 	}
 
-	.spec-slashes-fixed {
-		font-family: 'IBM Plex Mono', monospace;
-		font-size: 0.35rem;
-		color: rgba(255, 255, 255, 0.07);
-		letter-spacing: 0.05em;
-	}
+	/* spec-slashes-fixed is now handled via SlashDecor class */
 
 	.spec-slashes-overflow {
 		font-family: 'IBM Plex Mono', monospace;
-		font-size: 0.35rem;
-		color: rgba(255, 255, 255, 0.07);
-		letter-spacing: 0.05em;
 		flex: 1;
 		text-align: right;
 		overflow: hidden;
 		white-space: nowrap;
+	}
+
+	.spec-slashes-overflow :global(.slash-decor) {
+		font-size: 0.35rem;
 	}
 
 	/* Card body */
@@ -194,7 +189,7 @@
 	}
 
 	.spec-title {
-		font-family: 'Outfit', sans-serif;
+		font-family: var(--font-display);
 		font-weight: 700;
 		font-size: 0.8rem;
 		letter-spacing: 0.35em;
